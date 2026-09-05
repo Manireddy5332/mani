@@ -1,0 +1,12 @@
+packages:
+  - '.'
+
+allowBuilds:
+  '@prisma/engines': true
+  esbuild: true
+  prisma: true
+  sharp: true
+  unrs-resolver: true
+overrides:
+  pg: 8.22.0
+  pg-protocol: 1.15.0
