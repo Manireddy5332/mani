@@ -1,0 +1,731 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ContentSource {
+  ACADEMIC_CV
+  USER_PROVIDED
+  ADMIN
+}
+
+enum SocialLinkKind {
+  EMAIL
+  LINKEDIN
+  GITHUB
+  WEBSITE
+  OTHER
+}
+
+enum ResearchStage {
+  RESEARCH_INTEREST
+  EXPLORING
+  EARLY_STAGE
+  IN_PROGRESS
+  WORKING_PAPER
+  SUBMITTED
+  ACCEPTED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PublicationStage {
+  WORKING_PAPER
+  SUBMITTED
+  ACCEPTED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum PublicationType {
+  JOURNAL_ARTICLE
+  CONFERENCE_PAPER
+  WORKSHOP_PAPER
+  PREPRINT
+  BOOK_CHAPTER
+  THESIS
+  OTHER
+}
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  ARCHIVED
+}
+
+enum ExperienceType {
+  CLIENT_ENGAGEMENT
+  EMPLOYMENT
+  INTERNSHIP
+  CONTRACT
+  OTHER
+}
+
+enum MediaRole {
+  COVER
+  GALLERY
+  ARCHITECTURE_DIAGRAM
+  FIGURE
+  FEATURED_IMAGE
+  INLINE
+  ATTACHMENT
+}
+
+enum ContactSubmissionStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+  SPAM
+}
+
+model Profile {
+  id           String        @id @default(uuid()) @db.Uuid
+  key          String        @unique
+  slug         String        @unique
+  name         String
+  positioning  String[]      @default([])
+  headline     String        @db.Text
+  introduction String        @db.Text
+  about        String[]      @default([])
+  location     String?
+  avatarId     String?       @unique @db.Uuid
+  status       ContentStatus @default(DRAFT)
+  source       ContentSource @default(ADMIN)
+  createdAt    DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime      @updatedAt @db.Timestamptz(3)
+
+  avatar            MediaAsset?        @relation("ProfileAvatar", fields: [avatarId], references: [id], onDelete: SetNull)
+  socialLinks       SocialLink[]
+  researchInterests ResearchInterest[]
+  researchProjects  ResearchProject[]
+  publications      Publication[]
+  projects          Project[]
+  experiences       Experience[]
+  educationRecords  Education[]
+  skillCategories   SkillCategory[]
+  certifications    Certification[]
+  articles          Article[]
+  tags              Tag[]
+  resumes           Resume[]
+}
+
+model SocialLink {
+  id        String         @id @default(uuid()) @db.Uuid
+  profileId String         @db.Uuid
+  key       String
+  kind      SocialLinkKind
+  label     String
+  url       String         @db.Text
+  handle    String?
+  sortOrder Int            @default(0)
+  status    ContentStatus  @default(DRAFT)
+  source    ContentSource  @default(ADMIN)
+  createdAt DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime       @updatedAt @db.Timestamptz(3)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Restrict)
+
+  @@unique([profileId, key])
+  @@index([profileId, status, sortOrder])
+}
+
+model ResearchInterest {
+  id          String        @id @default(uuid()) @db.Uuid
+  profileId   String        @db.Uuid
+  seedKey     String?       @unique
+  slug        String        @unique
+  name        String
+  description String?       @db.Text
+  sortOrder   Int           @default(0)
+  status      ContentStatus @default(DRAFT)
+  source      ContentSource @default(ADMIN)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime      @updatedAt @db.Timestamptz(3)
+
+  profile          Profile           @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  researchProjects ResearchProject[] @relation("ResearchProjectInterests")
+
+  @@index([profileId, status, sortOrder])
+}
+
+model ResearchProject {
+  id                 String        @id @default(uuid()) @db.Uuid
+  profileId          String        @db.Uuid
+  seedKey            String?       @unique
+  slug               String        @unique
+  title              String
+  summary            String        @db.Text
+  abstract           String?       @db.Text
+  motivation         String?       @db.Text
+  methodology        String?       @db.Text
+  methodologySummary String?       @db.Text
+  domain             String?
+  researchArea       String?
+  format             String?
+  scopeBoundary      String?       @db.Text
+  evidenceStatus     String?       @db.Text
+  advisor            String?
+  collaborators      String[]      @default([])
+  technologies       String[]      @default([])
+  datasets           String[]      @default([])
+  githubUrl          String?       @db.Text
+  paperUrl           String?       @db.Text
+  progressPercent    Int?
+  stage              ResearchStage @default(EXPLORING)
+  startYear          Int?          @db.SmallInt
+  startMonth         Int?          @db.SmallInt
+  endYear            Int?          @db.SmallInt
+  endMonth           Int?          @db.SmallInt
+  isCurrent          Boolean       @default(false)
+  featured           Boolean       @default(false)
+  status             ContentStatus @default(DRAFT)
+  source             ContentSource @default(ADMIN)
+  sortOrder          Int           @default(0)
+  publishedAt        DateTime?     @db.Timestamptz(3)
+  createdAt          DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime      @updatedAt @db.Timestamptz(3)
+
+  profile      Profile            @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  interests    ResearchInterest[] @relation("ResearchProjectInterests")
+  questions    ResearchQuestion[]
+  publications Publication[]      @relation("ResearchPublications")
+  projects     Project[]          @relation("ProjectResearch")
+  media        ResearchMedia[]
+
+  @@index([profileId, status, featured, sortOrder])
+  @@index([stage, status])
+}
+
+model ResearchQuestion {
+  id                String   @id @default(uuid()) @db.Uuid
+  researchProjectId String   @db.Uuid
+  key               String
+  question          String   @db.Text
+  sortOrder         Int      @default(0)
+  createdAt         DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @db.Timestamptz(3)
+
+  researchProject ResearchProject @relation(fields: [researchProjectId], references: [id], onDelete: Cascade)
+
+  @@unique([researchProjectId, key])
+  @@index([researchProjectId, sortOrder])
+}
+
+model Publication {
+  id          String           @id @default(uuid()) @db.Uuid
+  profileId   String           @db.Uuid
+  slug        String           @unique
+  title       String
+  authors     String[]         @default([])
+  venue       String?
+  type        PublicationType
+  year        Int?             @db.SmallInt
+  abstract    String?          @db.Text
+  doi         String?          @unique
+  arxivUrl    String?          @db.Text
+  paperUrl    String?          @db.Text
+  citation    String?          @db.Text
+  bibtex      String?          @db.Text
+  stage       PublicationStage
+  featured    Boolean          @default(false)
+  status      ContentStatus    @default(DRAFT)
+  source      ContentSource    @default(ADMIN)
+  sortOrder   Int              @default(0)
+  publishedAt DateTime?        @db.Timestamptz(3)
+  createdAt   DateTime         @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime         @updatedAt @db.Timestamptz(3)
+
+  profile          Profile           @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  researchProjects ResearchProject[] @relation("ResearchPublications")
+
+  @@index([profileId, status, featured, sortOrder])
+  @@index([stage, year])
+}
+
+model Project {
+  id               String         @id @default(uuid()) @db.Uuid
+  profileId        String         @db.Uuid
+  educationId      String?        @db.Uuid
+  seedKey          String?        @unique
+  slug             String         @unique
+  title            String
+  shortTitle       String?
+  type             String?
+  category         String?
+  summary          String         @db.Text
+  description      String?        @db.Text
+  problemStatement String?        @db.Text
+  motivation       String?        @db.Text
+  approach         String?        @db.Text
+  architecture     String?        @db.Text
+  aiModels         String[]       @default([])
+  datasets         String[]       @default([])
+  challenges       String[]       @default([])
+  results          String[]       @default([])
+  lessons          String[]       @default([])
+  institution      String?
+  advisor          String?
+  role             String?
+  implementation   String?
+  repositoryUrl    String?        @db.Text
+  demoUrl          String?        @db.Text
+  documentationUrl String?        @db.Text
+  seoTitle         String?
+  seoDescription   String?        @db.Text
+  projectStatus    ProjectStatus?
+  startYear        Int?           @db.SmallInt
+  startMonth       Int?           @db.SmallInt
+  endYear          Int?           @db.SmallInt
+  endMonth         Int?           @db.SmallInt
+  isCurrent        Boolean        @default(false)
+  featured         Boolean        @default(false)
+  status           ContentStatus  @default(DRAFT)
+  source           ContentSource  @default(ADMIN)
+  sortOrder        Int            @default(0)
+  publishedAt      DateTime?      @db.Timestamptz(3)
+  createdAt        DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime       @updatedAt @db.Timestamptz(3)
+
+  profile          Profile               @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  education        Education?            @relation(fields: [educationId], references: [id], onDelete: SetNull)
+  researchProjects ResearchProject[]     @relation("ProjectResearch")
+  contributions    ProjectContribution[]
+  features         ProjectFeature[]
+  technologies     ProjectTechnology[]
+  media            ProjectMedia[]
+
+  @@index([profileId, status, featured, sortOrder])
+  @@index([educationId])
+}
+
+model ProjectContribution {
+  id          String   @id @default(uuid()) @db.Uuid
+  projectId   String   @db.Uuid
+  key         String
+  label       String
+  description String   @db.Text
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, key])
+  @@index([projectId, sortOrder])
+}
+
+model ProjectFeature {
+  id          String   @id @default(uuid()) @db.Uuid
+  projectId   String   @db.Uuid
+  key         String
+  name        String
+  description String?  @db.Text
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, key])
+  @@index([projectId, sortOrder])
+}
+
+model ProjectTechnology {
+  id        String   @id @default(uuid()) @db.Uuid
+  projectId String   @db.Uuid
+  slug      String
+  name      String
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, slug])
+  @@index([projectId, sortOrder])
+}
+
+model Experience {
+  id            String         @id @default(uuid()) @db.Uuid
+  profileId     String         @db.Uuid
+  seedKey       String?        @unique
+  slug          String         @unique
+  type          ExperienceType
+  organization  String
+  role          String
+  location      String?
+  summary       String         @db.Text
+  domain        String?
+  practiceAreas String[]       @default([])
+  highlights    String[]       @default([])
+  startYear     Int?           @db.SmallInt
+  startMonth    Int?           @db.SmallInt
+  endYear       Int?           @db.SmallInt
+  endMonth      Int?           @db.SmallInt
+  isCurrent     Boolean        @default(false)
+  featured      Boolean        @default(false)
+  status        ContentStatus  @default(DRAFT)
+  source        ContentSource  @default(ADMIN)
+  sortOrder     Int            @default(0)
+  createdAt     DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime       @updatedAt @db.Timestamptz(3)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  skills  Skill[] @relation("ExperienceSkills")
+
+  @@index([profileId, status, sortOrder])
+}
+
+model Education {
+  id          String        @id @default(uuid()) @db.Uuid
+  profileId   String        @db.Uuid
+  seedKey     String?       @unique
+  slug        String        @unique
+  institution String
+  degree      String
+  field       String?
+  location    String?
+  startYear   Int?          @db.SmallInt
+  startMonth  Int?          @db.SmallInt
+  endYear     Int?          @db.SmallInt
+  endMonth    Int?          @db.SmallInt
+  isCurrent   Boolean       @default(false)
+  gpa         Decimal?      @db.Decimal(4, 2)
+  gpaScale    Decimal?      @db.Decimal(4, 2)
+  coursework  String[]      @default([])
+  thesis      String?       @db.Text
+  activities  String[]      @default([])
+  url         String?       @db.Text
+  status      ContentStatus @default(DRAFT)
+  source      ContentSource @default(ADMIN)
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime      @updatedAt @db.Timestamptz(3)
+
+  profile  Profile   @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  projects Project[]
+
+  @@index([profileId, status, sortOrder])
+}
+
+model SkillCategory {
+  id          String        @id @default(uuid()) @db.Uuid
+  profileId   String        @db.Uuid
+  seedKey     String?       @unique
+  slug        String        @unique
+  name        String
+  description String?       @db.Text
+  sortOrder   Int           @default(0)
+  status      ContentStatus @default(DRAFT)
+  source      ContentSource @default(ADMIN)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime      @updatedAt @db.Timestamptz(3)
+
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  skills  Skill[]
+
+  @@index([profileId, status, sortOrder])
+}
+
+model Skill {
+  id          String        @id @default(uuid()) @db.Uuid
+  categoryId  String        @db.Uuid
+  seedKey     String?       @unique
+  slug        String
+  name        String
+  description String?       @db.Text
+  sortOrder   Int           @default(0)
+  status      ContentStatus @default(DRAFT)
+  source      ContentSource @default(ADMIN)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime      @updatedAt @db.Timestamptz(3)
+
+  category    SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  experiences Experience[]  @relation("ExperienceSkills")
+
+  @@unique([categoryId, slug])
+  @@index([categoryId, status, sortOrder])
+}
+
+model Certification {
+  id            String        @id @default(uuid()) @db.Uuid
+  profileId     String        @db.Uuid
+  slug          String        @unique
+  name          String
+  issuer        String
+  credentialId  String?
+  credentialUrl String?       @db.Text
+  description   String?       @db.Text
+  issueYear     Int?          @db.SmallInt
+  issueMonth    Int?          @db.SmallInt
+  expiryYear    Int?          @db.SmallInt
+  expiryMonth   Int?          @db.SmallInt
+  doesNotExpire Boolean       @default(false)
+  fileAssetId   String?       @unique @db.Uuid
+  featured      Boolean       @default(false)
+  status        ContentStatus @default(DRAFT)
+  source        ContentSource @default(ADMIN)
+  sortOrder     Int           @default(0)
+  createdAt     DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime      @updatedAt @db.Timestamptz(3)
+
+  profile   Profile     @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  fileAsset MediaAsset? @relation("CertificationAsset", fields: [fileAssetId], references: [id], onDelete: SetNull)
+
+  @@index([profileId, status, sortOrder])
+}
+
+model Article {
+  id                      String        @id @default(uuid()) @db.Uuid
+  profileId               String        @db.Uuid
+  slug                    String        @unique
+  title                   String
+  excerpt                 String?       @db.Text
+  content                 String        @db.Text
+  contentFormat           String        @default("markdown")
+  category                String?
+  estimatedReadingMinutes Int?
+  seoTitle                String?
+  seoDescription          String?       @db.Text
+  featured                Boolean       @default(false)
+  status                  ContentStatus @default(DRAFT)
+  source                  ContentSource @default(ADMIN)
+  sortOrder               Int           @default(0)
+  publishedAt             DateTime?     @db.Timestamptz(3)
+  createdAt               DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt               DateTime      @updatedAt @db.Timestamptz(3)
+
+  profile Profile        @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  tags    Tag[]
+  media   ArticleMedia[]
+
+  @@index([profileId, status, featured, sortOrder])
+  @@index([publishedAt])
+}
+
+model Tag {
+  id        String   @id @default(uuid()) @db.Uuid
+  profileId String   @db.Uuid
+  slug      String
+  name      String
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+
+  profile  Profile   @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  articles Article[]
+
+  @@unique([profileId, slug])
+  @@index([profileId, name])
+}
+
+model MediaAsset {
+  id               String   @id @default(uuid()) @db.Uuid
+  storageKey       String   @unique
+  provider         String?
+  publicUrl        String?  @db.Text
+  originalFilename String
+  mimeType         String
+  byteSize         BigInt?
+  width            Int?
+  height           Int?
+  altText          String?  @db.Text
+  caption          String?  @db.Text
+  checksum         String?
+  createdAt        DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt        DateTime @updatedAt @db.Timestamptz(3)
+
+  avatarFor          Profile?        @relation("ProfileAvatar")
+  certificationFor   Certification?  @relation("CertificationAsset")
+  resumeFor          Resume?         @relation("ResumeAsset")
+  projectPlacements  ProjectMedia[]
+  researchPlacements ResearchMedia[]
+  articlePlacements  ArticleMedia[]
+
+  @@index([checksum])
+}
+
+model ProjectMedia {
+  id           String    @id @default(uuid()) @db.Uuid
+  projectId    String    @db.Uuid
+  mediaAssetId String    @db.Uuid
+  role         MediaRole
+  sortOrder    Int       @default(0)
+  altOverride  String?   @db.Text
+  caption      String?   @db.Text
+  createdAt    DateTime  @default(now()) @db.Timestamptz(3)
+
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  mediaAsset MediaAsset @relation(fields: [mediaAssetId], references: [id], onDelete: Restrict)
+
+  @@unique([projectId, mediaAssetId, role])
+  @@index([projectId, sortOrder])
+  @@index([mediaAssetId])
+}
+
+model ResearchMedia {
+  id                String    @id @default(uuid()) @db.Uuid
+  researchProjectId String    @db.Uuid
+  mediaAssetId      String    @db.Uuid
+  role              MediaRole
+  sortOrder         Int       @default(0)
+  altOverride       String?   @db.Text
+  caption           String?   @db.Text
+  createdAt         DateTime  @default(now()) @db.Timestamptz(3)
+
+  researchProject ResearchProject @relation(fields: [researchProjectId], references: [id], onDelete: Cascade)
+  mediaAsset      MediaAsset      @relation(fields: [mediaAssetId], references: [id], onDelete: Restrict)
+
+  @@unique([researchProjectId, mediaAssetId, role])
+  @@index([researchProjectId, sortOrder])
+  @@index([mediaAssetId])
+}
+
+model ArticleMedia {
+  id           String    @id @default(uuid()) @db.Uuid
+  articleId    String    @db.Uuid
+  mediaAssetId String    @db.Uuid
+  role         MediaRole
+  sortOrder    Int       @default(0)
+  altOverride  String?   @db.Text
+  caption      String?   @db.Text
+  createdAt    DateTime  @default(now()) @db.Timestamptz(3)
+
+  article    Article    @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  mediaAsset MediaAsset @relation(fields: [mediaAssetId], references: [id], onDelete: Restrict)
+
+  @@unique([articleId, mediaAssetId, role])
+  @@index([articleId, sortOrder])
+  @@index([mediaAssetId])
+}
+
+model Resume {
+  id          String        @id @default(uuid()) @db.Uuid
+  profileId   String        @db.Uuid
+  slug        String        @unique
+  title       String
+  version     String?
+  fileAssetId String?       @unique @db.Uuid
+  isCurrent   Boolean       @default(false)
+  status      ContentStatus @default(DRAFT)
+  source      ContentSource @default(ADMIN)
+  publishedAt DateTime?     @db.Timestamptz(3)
+  createdAt   DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime      @updatedAt @db.Timestamptz(3)
+
+  profile   Profile     @relation(fields: [profileId], references: [id], onDelete: Restrict)
+  fileAsset MediaAsset? @relation("ResumeAsset", fields: [fileAssetId], references: [id], onDelete: SetNull)
+
+  @@index([profileId, status, isCurrent])
+}
+
+model ContactSubmission {
+  id           String                  @id @default(uuid()) @db.Uuid
+  name         String
+  email        String
+  organization String?
+  subject      String
+  message      String                  @db.Text
+  status       ContactSubmissionStatus @default(NEW)
+  hashedIp     String?
+  userAgent    String?                 @db.Text
+  receivedAt   DateTime                @default(now()) @db.Timestamptz(3)
+  readAt       DateTime?               @db.Timestamptz(3)
+  repliedAt    DateTime?               @db.Timestamptz(3)
+  archivedAt   DateTime?               @db.Timestamptz(3)
+  updatedAt    DateTime                @updatedAt @db.Timestamptz(3)
+
+  @@index([status, receivedAt])
+  @@index([email])
+}
+
+model SiteSetting {
+  id          String   @id @default(uuid()) @db.Uuid
+  key         String   @unique
+  value       Json
+  description String?  @db.Text
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+}
+
+// Better Auth owns these four models. IDs remain provider-generated strings
+// rather than UUID columns because Better Auth controls their lifecycle.
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
+
+  sessions Session[]
+  accounts Account[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime @db.Timestamptz(3)
+  token     String   @unique
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  ipAddress String?
+  userAgent String?  @db.Text
+  userId    String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?   @db.Text
+  refreshToken          String?   @db.Text
+  idToken               String?   @db.Text
+  accessTokenExpiresAt  DateTime? @db.Timestamptz(3)
+  refreshTokenExpiresAt DateTime? @db.Timestamptz(3)
+  scope                 String?
+  password              String?   @db.Text
+  createdAt             DateTime  @default(now()) @db.Timestamptz(3)
+  updatedAt             DateTime  @updatedAt @db.Timestamptz(3)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String   @db.Text
+  expiresAt  DateTime @db.Timestamptz(3)
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(3)
+
+  @@index([identifier])
+  @@index([expiresAt])
+  @@map("verification")
+}

@@ -1,0 +1,57 @@
+{
+  "name": "manikanta-ai-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "packageManager": "pnpm@11.16.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "prisma generate && next build",
+    "postinstall": "prisma generate",
+    "start": "next start",
+    "test": "tsx --test src/lib/auth/policy.test.ts src/lib/auth/sign-out.test.ts src/lib/origin-policy.test.ts src/lib/metadata.test.ts src/lib/seo-routes.test.ts src/lib/public-content/fallback.test.ts src/lib/public-content/cache-policy.test.ts src/features/admin/schemas.test.ts src/features/admin/nested-schemas.test.ts src/features/admin/registry.test.ts src/features/admin/policies.test.ts src/features/home/mappers.test.ts src/features/profile/mappers.test.ts src/features/contact/mappers.test.ts src/features/research/mappers.test.ts src/features/projects/mappers.test.ts src/features/experience/mapper.test.ts src/features/writing/mapper.test.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit --incremental false",
+    "db:validate": "prisma validate",
+    "db:generate": "prisma generate",
+    "db:format": "prisma format",
+    "db:migrate:dev": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:migrate:status": "prisma migrate status",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@better-auth/prisma-adapter": "1.6.25",
+    "@prisma/adapter-pg": "7.9.1",
+    "@prisma/client": "7.9.1",
+    "better-auth": "1.6.25",
+    "clsx": "2.1.1",
+    "dotenv": "17.4.2",
+    "lucide-react": "1.30.0",
+    "motion": "13.0.0",
+    "next": "16.2.11",
+    "next-themes": "0.4.6",
+    "pg": "8.22.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "tailwind-merge": "3.6.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/pg": "8.21.0",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.11",
+    "prisma": "7.9.1",
+    "tailwindcss": "^4",
+    "tsx": "4.23.11",
+    "typescript": "^5"
+  }
+}
