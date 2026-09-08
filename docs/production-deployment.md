@@ -19,18 +19,17 @@ control, build logs, issue trackers, or deployment notes.
 | Function region | `iad1` |
 | Database | Existing Neon PostgreSQL database |
 
-The Vercel project is linked to GitHub repository
-`Manireddy5332/mani`, production branch `main`. The Phase 10 release itself was
-uploaded from the reviewed local workspace with Vercel CLI and then promoted
-to the stable production URL.
+The Vercel project is linked to GitHub repository `Manireddy5332/mani`, with
+`main` configured as the production branch. The original Phase 10 release was
+uploaded from the reviewed local workspace with Vercel CLI while source control
+was being initialized; GitHub is now the authoritative release source.
 
-Important source-control caveat: the local workspace currently has no commit or
-Git remote, and its application files are untracked. The Vercel-side GitHub
-link does not prove that GitHub contains this exact deployed tree. Before using
-push-triggered deployments, review the tree, configure the intended Git
-identity and remote, create the initial commit, push `main`, and confirm that
-Vercel builds the same source. Do not overwrite the connected repository
-without that review.
+For each change, create or update a topic branch, push it to GitHub, and open a
+pull request into `main`. Review the complete diff and wait for the required
+GitHub checks and Vercel Preview deployment to succeed. Merge only after those
+checks are green. Vercel then creates the production deployment from the merged
+`main` commit. Do not push unreviewed changes directly to `main` or promote a
+feature-branch Preview deployment to production.
 
 ## Recommended target
 
@@ -131,9 +130,21 @@ database URLs.
 
 ## Deploy, redeploy, and roll back
 
-Run releases from a reviewed workspace. A safer production release creates an
-immutable production-target deployment without moving the public domain, checks
-its build, and then promotes that exact deployment:
+Use GitHub as the authoritative production release path:
+
+1. Create or update a topic branch; do not work directly on `main`.
+2. Run the pre-deployment checks and push the reviewed commit.
+3. Open a pull request into `main`, review the complete diff, and confirm it
+   contains no secrets or generated artifacts.
+4. Wait for all required GitHub checks and the Vercel Preview deployment to
+   pass.
+5. Merge the pull request only after approval and green checks.
+6. Confirm Vercel deploys the exact merged `main` commit to the production
+   domain, then complete the post-deployment smoke tests.
+
+Reserve a manual Vercel CLI production deployment or promotion for an explicitly
+approved exceptional release or recovery. Inspect the immutable deployment
+before promoting it:
 
 ```powershell
 pnpm dlx vercel@latest deploy --prod --skip-domain --yes
@@ -142,10 +153,9 @@ pnpm dlx vercel@latest promote https://DEPLOYMENT_URL --yes
 ```
 
 Do not put environment values on the command line. They are read from the
-encrypted Vercel Production environment. A routine CLI redeploy can use the
-same sequence. After the local tree is deliberately synchronized with the
-connected GitHub repository, a reviewed push to `main` can also initiate the
-Vercel production workflow.
+encrypted Vercel Production environment. A normal redeploy follows the same
+topic-branch and pull-request workflow so the merged `main` commit remains the
+audited source of the production release.
 
 To roll back, open the Vercel project's **Deployments** page, select the prior
 known-good immutable deployment, inspect its status, and promote it to the

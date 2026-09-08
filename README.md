@@ -234,10 +234,12 @@ Prisma release sequence, Vercel settings, verification evidence, and
 redeploy/rollback procedures are documented in
 [`docs/production-deployment.md`](docs/production-deployment.md).
 
-Vercel is linked to `Manireddy5332/mani`, but this local workspace currently
-has no commit or Git remote. The Phase 10 release was uploaded directly from
-the reviewed workspace with Vercel CLI. Review, commit, and push this exact tree
-before treating Git-triggered deployments as authoritative.
+Source control is hosted in GitHub at
+[`Manireddy5332/mani`](https://github.com/Manireddy5332/mani). Changes are
+developed on topic branches, pushed to GitHub, and merged into `main` only
+through a reviewed pull request after its GitHub and Vercel Preview checks pass.
+Vercel uses `main` as the production branch, so production is deployed from the
+reviewed merged commit rather than directly from a feature branch.
 
 Production must use one canonical HTTPS origin for both
 `NEXT_PUBLIC_SITE_URL` and `BETTER_AUTH_URL`. Runtime database/auth traffic uses
