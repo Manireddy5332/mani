@@ -14,6 +14,10 @@ const publicEnvironmentSchema = z.object({
 export const publicEnvironment = publicEnvironmentSchema.parse({
   NEXT_PUBLIC_SITE_URL:
     process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" &&
+      process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+      : undefined) ??
     (process.env.NODE_ENV === "production"
       ? undefined
       : "http://localhost:3000"),
