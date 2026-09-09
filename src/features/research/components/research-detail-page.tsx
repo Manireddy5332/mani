@@ -59,7 +59,7 @@ export function ResearchDetailPage({ research }: ResearchDetailPageProps) {
         title={research.title}
       />
 
-      <section className="border-b border-line py-20 sm:py-24 lg:py-32">
+      <section className="relative border-b border-line bg-surface/35 py-20 sm:py-24 lg:py-32">
         <Container>
           <Reveal>
             <SectionHeading
@@ -70,16 +70,34 @@ export function ResearchDetailPage({ research }: ResearchDetailPageProps) {
           </Reveal>
 
           {research.questions.length > 0 ? (
-            <ol className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-2" aria-label="Research questions">
+            <ol
+              className="mt-12 grid gap-4 lg:grid-cols-2"
+              aria-label="Research questions"
+            >
               {research.questions.map((question, index) => (
-                <li key={`${index}-${question}`} className="bg-canvas p-6 sm:p-8">
-                  <div className="flex items-center justify-between gap-4 border-b border-line pb-5">
+                <li
+                  key={`${index}-${question}`}
+                  className="group relative min-h-64 overflow-hidden rounded-2xl border border-line/80 bg-canvas p-6 shadow-[0_20px_60px_-48px_rgb(20_25_35/0.4)] transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none sm:p-8"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-x-0 top-0 h-1 origin-left scale-x-50 bg-gradient-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100 motion-reduce:transition-none"
+                  />
+                  <span
+                    aria-hidden="true"
+                    className="absolute -right-4 -bottom-10 font-serif text-[8rem] leading-none font-medium tracking-[-0.08em] text-primary/[0.04] transition-transform duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2 motion-reduce:transform-none motion-reduce:transition-none"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div className="relative flex items-center justify-between gap-4 border-b border-line pb-5">
                     <span className="font-mono text-xs font-semibold tracking-[0.12em] text-primary uppercase">
                       Question {String(index + 1).padStart(2, "0")}
                     </span>
-                    <CircleHelp aria-hidden="true" className="size-4 text-secondary" />
+                    <span className="grid size-9 place-items-center rounded-full border border-secondary/20 bg-secondary/10 text-secondary transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none">
+                      <CircleHelp aria-hidden="true" className="size-4" />
+                    </span>
                   </div>
-                  <h3 className="mt-7 max-w-xl font-serif text-2xl leading-tight font-medium tracking-[-0.025em] text-ink sm:text-3xl">
+                  <h3 className="relative mt-7 max-w-xl font-serif text-2xl leading-tight font-medium tracking-[-0.025em] text-ink transition-colors duration-200 group-hover:text-primary motion-reduce:transition-none sm:text-3xl">
                     {question}
                   </h3>
                 </li>
@@ -107,8 +125,15 @@ export function ResearchDetailPage({ research }: ResearchDetailPageProps) {
 
           <div className="mt-12 grid gap-5 lg:grid-cols-3">
             <Reveal className="h-full">
-              <Surface as="article" className="h-full" padding="lg" variant="accent">
-                <FlaskConical aria-hidden="true" className="size-6 text-primary" />
+              <Surface
+                as="article"
+                className="group relative h-full overflow-hidden transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                padding="lg"
+                variant="accent"
+              >
+                <span className="grid size-12 place-items-center rounded-xl border border-primary/20 bg-canvas/70 text-primary shadow-sm transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none">
+                  <FlaskConical aria-hidden="true" className="size-6" />
+                </span>
                 <p className="mt-8 eyebrow text-primary">Method</p>
                 <h3 className="mt-3 font-serif text-3xl leading-tight font-medium tracking-[-0.03em]">
                   {research.methodology ?? "Method not yet documented"}
@@ -121,8 +146,15 @@ export function ResearchDetailPage({ research }: ResearchDetailPageProps) {
             </Reveal>
 
             <Reveal className="h-full" delay={0.05}>
-              <Surface as="article" className="h-full" padding="lg" variant="subtle">
-                <CircleHelp aria-hidden="true" className="size-6 text-secondary" />
+              <Surface
+                as="article"
+                className="group relative h-full overflow-hidden transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-secondary/45 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                padding="lg"
+                variant="subtle"
+              >
+                <span className="grid size-12 place-items-center rounded-xl border border-secondary/20 bg-secondary/10 text-secondary shadow-sm transition-transform duration-300 group-hover:rotate-3 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none">
+                  <CircleHelp aria-hidden="true" className="size-6" />
+                </span>
                 <p className="mt-8 eyebrow text-secondary">Study boundary</p>
                 <h3 className="mt-3 font-serif text-3xl leading-tight font-medium tracking-[-0.03em]">
                   {research.scopeTitle}
@@ -135,8 +167,15 @@ export function ResearchDetailPage({ research }: ResearchDetailPageProps) {
             </Reveal>
 
             <Reveal className="h-full" delay={0.1}>
-              <Surface as="article" className="h-full" padding="lg" variant="raised">
-                <FileText aria-hidden="true" className="size-6 text-primary" />
+              <Surface
+                as="article"
+                className="group relative h-full overflow-hidden transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                padding="lg"
+                variant="raised"
+              >
+                <span className="grid size-12 place-items-center rounded-xl border border-primary/20 bg-primary/10 text-primary shadow-sm transition-transform duration-300 group-hover:-rotate-3 group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none">
+                  <FileText aria-hidden="true" className="size-6" />
+                </span>
                 <p className="mt-8 eyebrow text-primary">Current status</p>
                 <h3 className="mt-3 font-serif text-3xl leading-tight font-medium tracking-[-0.03em]">
                   {research.evidenceTitle}
@@ -152,7 +191,7 @@ export function ResearchDetailPage({ research }: ResearchDetailPageProps) {
         </Container>
       </section>
 
-      <section className="border-b border-line py-20 sm:py-24 lg:py-32">
+      <section className="foundation-grid relative border-b border-line bg-surface/25 py-20 sm:py-24 lg:py-32">
         <Container>
           <Reveal>
             <EvidenceAtlas
@@ -180,11 +219,20 @@ export function ResearchDetailPage({ research }: ResearchDetailPageProps) {
               {research.interests.map((interest, index) => (
                 <li key={`${index}-${interest}`}>
                   <Reveal className="h-full" delay={index * 0.04}>
-                    <Surface as="article" className="h-full" padding="lg" variant="subtle">
+                    <Surface
+                      as="article"
+                      className="group relative h-full min-h-48 overflow-hidden transition-[border-color,transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-canvas hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                      padding="lg"
+                      variant="subtle"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary to-secondary opacity-60 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"
+                      />
                       <Badge variant="outline">
                         Interest {String(index + 1).padStart(2, "0")}
                       </Badge>
-                      <h3 className="mt-7 font-serif text-3xl leading-tight font-medium tracking-[-0.03em]">
+                      <h3 className="mt-7 font-serif text-3xl leading-tight font-medium tracking-[-0.03em] transition-colors duration-200 group-hover:text-primary motion-reduce:transition-none">
                         {interest}
                       </h3>
                     </Surface>
@@ -204,7 +252,7 @@ export function ResearchDetailPage({ research }: ResearchDetailPageProps) {
             <Surface
               as="aside"
               aria-label="Research overview navigation"
-              className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
+              className="relative flex flex-col gap-6 overflow-hidden shadow-[0_24px_70px_-52px_rgb(20_25_35/0.45)] sm:flex-row sm:items-center sm:justify-between"
               padding="lg"
               variant="accent"
             >

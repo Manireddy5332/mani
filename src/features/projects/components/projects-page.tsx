@@ -68,31 +68,60 @@ export function ProjectsPage({ content }: ProjectsPageProps) {
           </>
         }
         aside={
-          <Surface as="aside" aria-label="Selected project overview" padding="lg" variant="accent">
-            <div className="flex items-center gap-3 text-primary">
-              <BookOpen aria-hidden="true" className="size-5" />
+          <Surface
+            as="aside"
+            aria-label="Selected project overview"
+            className="relative overflow-hidden shadow-lift"
+            padding="lg"
+            variant="accent"
+          >
+            <span
+              aria-hidden="true"
+              className="absolute -top-20 -right-16 size-48 rounded-full border border-primary/10 bg-primary/[0.055]"
+            />
+            <div className="relative flex items-center gap-3 text-primary">
+              <span className="grid size-11 place-items-center rounded-xl border border-primary/20 bg-canvas/70 shadow-sm">
+                <BookOpen aria-hidden="true" className="size-5" />
+              </span>
               <p className="eyebrow">{project.type}</p>
             </div>
-            <p className="mt-5 font-serif text-3xl leading-tight font-medium tracking-[-0.035em]">
+            <p className="relative mt-5 font-serif text-3xl leading-tight font-medium tracking-[-0.035em]">
               {project.indexSummaryTitle}
             </p>
-            <p className="mt-4 text-sm leading-7 text-muted">
+            <p className="relative mt-4 text-sm leading-7 text-muted">
               {project.indexSummaryDescription}
             </p>
           </Surface>
         }
       />
 
-      <section className="border-b border-line py-18 sm:py-24 lg:py-28">
+      <section className="relative border-b border-line bg-surface/35 py-18 sm:py-24 lg:py-28">
         <Container>
           <Reveal>
-            <article aria-labelledby="featured-project-title">
+            <article
+              aria-labelledby="featured-project-title"
+              className="relative overflow-hidden rounded-[1.75rem] border border-line/80 bg-canvas p-6 shadow-soft sm:p-8 lg:p-12"
+            >
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-primary to-secondary"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute -top-28 -right-24 size-72 rounded-full bg-primary/[0.055] blur-3xl"
+              />
               <div className="grid gap-10 lg:grid-cols-[minmax(0,0.38fr)_minmax(0,1fr)] lg:gap-16">
                 <aside
                   aria-label={`${project.shortTitle} metadata`}
-                  className="border-t border-line pt-5 lg:sticky lg:top-32 lg:self-start"
+                  className="relative rounded-2xl border border-line/75 bg-surface/60 p-5 lg:sticky lg:top-32 lg:self-start lg:p-6"
                 >
-                  <p className="eyebrow text-primary">01 / {project.type}</p>
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="eyebrow text-primary">01 / {project.type}</p>
+                    <span
+                      aria-hidden="true"
+                      className="size-2 rounded-full bg-secondary ring-4 ring-secondary/10"
+                    />
+                  </div>
                   <dl className="mt-7 divide-y divide-line border-y border-line">
                     <div className="py-4">
                       <dt className="eyebrow text-subtle">Type</dt>
@@ -127,7 +156,7 @@ export function ProjectsPage({ content }: ProjectsPageProps) {
                   </dl>
                 </aside>
 
-                <div>
+                <div className="relative">
                   <div className="flex flex-wrap items-center gap-3">
                     <Badge variant="accent">{project.type}</Badge>
                     {project.implementation ? (
@@ -196,14 +225,26 @@ export function ProjectsPage({ content }: ProjectsPageProps) {
               {project.contributions.map((contribution, index) => (
                 <li key={`${index}-${contribution.label}`}>
                   <Reveal className="h-full" delay={index * 0.05}>
-                    <Surface as="article" className="h-full" padding="lg" variant="subtle">
+                    <Surface
+                      as="article"
+                      className="group relative h-full overflow-hidden transition-[border-color,transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-canvas hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                      padding="lg"
+                      variant="subtle"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary to-secondary opacity-60 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"
+                      />
                       <div className="flex items-center justify-between gap-4 border-b border-line pb-5">
                         <span className="eyebrow text-primary">
                           Area {String(index + 1).padStart(2, "0")}
                         </span>
-                        <span aria-hidden="true" className="size-2 rounded-full bg-secondary" />
+                        <span
+                          aria-hidden="true"
+                          className="size-2 rounded-full bg-secondary transition-transform duration-300 group-hover:scale-150 motion-reduce:transform-none motion-reduce:transition-none"
+                        />
                       </div>
-                      <h3 className="mt-7 font-serif text-3xl leading-tight font-medium tracking-[-0.035em]">
+                      <h3 className="mt-7 font-serif text-3xl leading-tight font-medium tracking-[-0.035em] transition-colors duration-200 group-hover:text-primary motion-reduce:transition-none">
                         {contribution.label}
                       </h3>
                       <p className="mt-4 text-sm leading-7 text-muted">
@@ -227,7 +268,7 @@ export function ProjectsPage({ content }: ProjectsPageProps) {
               <Surface
                 as="aside"
                 aria-label="Project repository"
-                className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
+                className="group relative flex flex-col gap-6 overflow-hidden shadow-[0_24px_70px_-52px_rgb(20_25_35/0.45)] sm:flex-row sm:items-center sm:justify-between"
                 padding="lg"
                 variant="raised"
               >
@@ -255,7 +296,7 @@ export function ProjectsPage({ content }: ProjectsPageProps) {
       </section>
 
       {additionalProjects.length > 0 ? (
-        <section className="border-b border-line py-18 sm:py-24 lg:py-28">
+        <section className="foundation-grid relative border-b border-line bg-surface/25 py-18 sm:py-24 lg:py-28">
           <Container>
             <Reveal>
               <SectionHeading
@@ -268,9 +309,23 @@ export function ProjectsPage({ content }: ProjectsPageProps) {
               {additionalProjects.map((additionalProject, index) => (
                 <li key={additionalProject.slug}>
                   <Reveal className="h-full" delay={index * 0.05}>
-                    <Surface as="article" className="h-full" padding="lg" variant="subtle">
-                      <Badge variant="accent">{additionalProject.type}</Badge>
-                      <h3 className="mt-6 font-serif text-3xl leading-tight font-medium tracking-[-0.035em]">
+                    <Surface
+                      as="article"
+                      className="group relative h-full overflow-hidden transition-[border-color,transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-canvas hover:shadow-lift focus-within:border-primary/50 motion-reduce:transform-none motion-reduce:transition-none"
+                      padding="lg"
+                      variant="subtle"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-x-0 top-0 h-1 origin-left scale-x-50 bg-gradient-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100 motion-reduce:transition-none"
+                      />
+                      <div className="flex items-center justify-between gap-4">
+                        <Badge variant="accent">{additionalProject.type}</Badge>
+                        <span className="font-mono text-xs font-semibold text-subtle">
+                          {String(index + 2).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <h3 className="mt-6 font-serif text-3xl leading-tight font-medium tracking-[-0.035em] transition-colors duration-200 group-hover:text-primary motion-reduce:transition-none">
                         {additionalProject.title}
                       </h3>
                       <p className="mt-5 text-sm leading-7 text-muted">

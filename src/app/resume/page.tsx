@@ -8,7 +8,7 @@ const description =
   "A structured overview of Manikanta Reddy Anugu's professional experience, education, research direction, academic project, and technical expertise.";
 
 export const metadata = createPublicPageMetadata({
-  title: "Resume and CV",
+  title: "Academic CV",
   description,
   path: "/resume",
 });

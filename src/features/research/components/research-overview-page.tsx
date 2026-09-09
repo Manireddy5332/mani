@@ -28,18 +28,30 @@ function ResearchInterestList({
   interests: ResearchOverview["interests"];
 }) {
   return (
-    <ol className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2">
+    <ol className="grid gap-4 sm:grid-cols-2">
       {interests.map((interest, index) => (
         <li
           key={interest}
-          className="group flex min-h-40 flex-col justify-between bg-canvas p-6 transition-colors duration-200 hover:bg-surface motion-reduce:transition-none sm:p-7"
+          className="group relative flex min-h-48 overflow-hidden rounded-2xl border border-line/80 bg-canvas p-6 shadow-[0_18px_55px_-44px_rgb(20_25_35/0.35)] transition-[border-color,transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-surface hover:shadow-lift focus-within:border-primary/50 motion-reduce:transform-none motion-reduce:transition-none sm:p-7"
         >
-          <span className="font-mono text-[0.68rem] font-medium tracking-[0.16em] text-subtle uppercase">
-            Interest {String(index + 1).padStart(2, "0")}
+          <span
+            aria-hidden="true"
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary via-primary/70 to-secondary opacity-60 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"
+          />
+          <span
+            aria-hidden="true"
+            className="absolute -right-3 -bottom-8 font-serif text-[7rem] leading-none font-medium tracking-[-0.08em] text-primary/[0.045] transition-transform duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2 group-hover:text-primary/[0.08] motion-reduce:transform-none motion-reduce:transition-none"
+          >
+            {String(index + 1).padStart(2, "0")}
           </span>
-          <h3 className="mt-10 max-w-sm font-serif text-2xl leading-tight font-medium tracking-[-0.025em] text-ink transition-colors duration-200 group-hover:text-primary motion-reduce:transition-none">
-            {interest}
-          </h3>
+          <div className="relative z-10 flex h-full flex-col justify-between">
+            <span className="font-mono text-[0.68rem] font-medium tracking-[0.16em] text-subtle uppercase">
+              Interest {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 className="mt-10 max-w-sm font-serif text-2xl leading-tight font-medium tracking-[-0.025em] text-ink transition-colors duration-200 group-hover:text-primary motion-reduce:transition-none sm:text-[1.7rem]">
+              {interest}
+            </h3>
+          </div>
         </li>
       ))}
     </ol>
@@ -95,16 +107,30 @@ function PublicationList({
         description="Only publication records marked for public visibility are listed here."
       />
       <ol className="mt-10 grid gap-4 md:grid-cols-2">
-        {publications.map((publication) => (
+        {publications.map((publication, index) => (
           <li key={publication.slug}>
-            <Surface as="article" className="h-full" padding="lg" variant="subtle">
+            <Surface
+              as="article"
+              className="group relative h-full overflow-hidden transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+              padding="lg"
+              variant="subtle"
+            >
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 top-0 h-1 origin-left scale-x-50 bg-gradient-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100 motion-reduce:transition-none"
+              />
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="eyebrow text-primary">{publication.status}</p>
-                {publication.year ? (
-                  <span className="font-mono text-xs text-subtle">
-                    {publication.year}
+                <div className="flex items-center gap-3">
+                  {publication.year ? (
+                    <span className="font-mono text-xs text-subtle">
+                      {publication.year}
+                    </span>
+                  ) : null}
+                  <span className="font-mono text-[0.65rem] text-subtle/70">
+                    {String(index + 1).padStart(2, "0")}
                   </span>
-                ) : null}
+                </div>
               </div>
               <h3 className="mt-6 font-serif text-2xl leading-tight font-medium tracking-[-0.03em] text-ink">
                 {publication.title}
@@ -148,7 +174,20 @@ export function ResearchOverviewPage({ overview }: ResearchOverviewPageProps) {
         title="Questions grounded in real-world AI practice."
         description="My research direction examines how generative AI is adopted, evaluated, and sustained beyond controlled demonstrations, with particular attention to retrieval, comparison, and reliability."
         aside={
-          <Surface as="aside" padding="lg" variant="raised">
+          <Surface
+            as="aside"
+            className="relative overflow-hidden shadow-lift"
+            padding="lg"
+            variant="raised"
+          >
+            <span
+              aria-hidden="true"
+              className="absolute -top-20 -right-20 size-48 rounded-full bg-primary/10 blur-3xl"
+            />
+            <span
+              aria-hidden="true"
+              className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary to-secondary"
+            />
             <p className="eyebrow text-primary">
               {currentDirection
                 ? currentDirection.isCurrent
@@ -190,7 +229,7 @@ export function ResearchOverviewPage({ overview }: ResearchOverviewPageProps) {
         }
       />
 
-      <section className="border-b border-line py-20 sm:py-24 lg:py-32">
+      <section className="relative border-b border-line bg-surface/35 py-20 sm:py-24 lg:py-32">
         <Container>
           {currentDirection ? (
             <>
@@ -210,12 +249,22 @@ export function ResearchOverviewPage({ overview }: ResearchOverviewPageProps) {
 
               <div className="mt-12 grid gap-6 lg:grid-cols-[minmax(0,0.55fr)_minmax(0,1fr)] lg:gap-10">
                 <Reveal delay={0.04}>
-                  <Surface className="h-full" padding="lg" variant="accent">
-                    <FlaskConical
+                  <Surface
+                    className="group relative h-full overflow-hidden transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                    padding="lg"
+                    variant="accent"
+                  >
+                    <span
                       aria-hidden="true"
-                      className="size-7 text-primary"
-                      strokeWidth={1.6}
+                      className="absolute -right-16 -bottom-16 size-52 rounded-full border border-primary/10 bg-primary/[0.035] transition-transform duration-500 group-hover:scale-110 motion-reduce:transform-none motion-reduce:transition-none"
                     />
+                    <span className="relative grid size-12 place-items-center rounded-xl border border-primary/20 bg-canvas/70 text-primary shadow-sm">
+                      <FlaskConical
+                        aria-hidden="true"
+                        className="size-6"
+                        strokeWidth={1.6}
+                      />
+                    </span>
                     <h3 className="mt-8 font-serif text-3xl leading-tight font-medium tracking-[-0.03em] text-ink">
                       Scope before conclusions.
                     </h3>
@@ -229,7 +278,12 @@ export function ResearchOverviewPage({ overview }: ResearchOverviewPageProps) {
                 </Reveal>
 
                 <Reveal delay={0.08}>
-                  <Surface as="section" aria-labelledby="questions-title" padding="none">
+                  <Surface
+                    as="section"
+                    aria-labelledby="questions-title"
+                    className="overflow-hidden shadow-[0_24px_70px_-55px_rgb(20_25_35/0.4)]"
+                    padding="none"
+                  >
                     <div className="flex items-center gap-3 border-b border-line px-6 py-5 sm:px-8">
                       <CircleHelp
                         aria-hidden="true"
@@ -248,9 +302,9 @@ export function ResearchOverviewPage({ overview }: ResearchOverviewPageProps) {
                         {currentDirection.questions.map((question, index) => (
                           <li
                             key={`${index}-${question}`}
-                            className="grid gap-4 py-6 sm:grid-cols-[2.5rem_1fr] sm:items-start"
+                            className="group grid gap-4 py-6 transition-colors duration-200 hover:bg-primary/[0.035] motion-reduce:transition-none sm:grid-cols-[2.5rem_1fr] sm:items-start"
                           >
-                            <span className="font-mono text-xs font-semibold text-primary">
+                            <span className="font-mono text-xs font-semibold text-primary transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transform-none motion-reduce:transition-none">
                               {String(index + 1).padStart(2, "0")}
                             </span>
                             <p className="text-sm leading-7 text-ink sm:text-base">
@@ -307,7 +361,7 @@ export function ResearchOverviewPage({ overview }: ResearchOverviewPageProps) {
         </Container>
       </section>
 
-      <section className="border-b border-line py-20 sm:py-24 lg:py-32">
+      <section className="foundation-grid relative border-b border-line bg-surface/25 py-20 sm:py-24 lg:py-32">
         <Container>
           <Reveal>
             <EvidenceAtlas
