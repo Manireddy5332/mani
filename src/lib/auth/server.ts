@@ -6,6 +6,7 @@ import { APIError } from "better-auth/api";
 
 import { getDatabase } from "@/lib/db";
 import { getServerEnvironment } from "@/lib/env.server";
+import { siteConfig } from "@/lib/site";
 
 import { isAdminIdentity } from "./policy";
 
@@ -23,7 +24,7 @@ function createAuthInstance() {
   const trustedOrigin = new URL(environment.BETTER_AUTH_URL).origin;
 
   return betterAuth({
-    appName: "Manikanta Reddy Anugu Portfolio",
+    appName: siteConfig.brandName,
     baseURL: environment.BETTER_AUTH_URL,
     secret: environment.BETTER_AUTH_SECRET,
     trustedOrigins: [trustedOrigin],

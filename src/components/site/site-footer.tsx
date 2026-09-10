@@ -18,7 +18,7 @@ export function SiteFooter({ className = "" }: SiteFooterProps) {
             href="/"
             className="inline-flex rounded-sm text-base font-semibold tracking-[-0.01em] text-ink transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
           >
-            {siteConfig.name}
+            {siteConfig.brandName}
           </Link>
           <p className="mt-2 max-w-xl text-sm leading-6 text-ink/62">
             {siteConfig.description}

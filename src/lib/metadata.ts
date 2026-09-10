@@ -28,7 +28,7 @@ export function createPublicPageMetadata({
     description,
     PAGE_DESCRIPTION_LIMIT,
   );
-  const socialTitle = `${pageTitle} · ${siteConfig.name}`;
+  const socialTitle = `${pageTitle} · ${siteConfig.brandName}`;
 
   return {
     title: pageTitle,
@@ -39,7 +39,7 @@ export function createPublicPageMetadata({
       title: socialTitle,
       description: pageDescription,
       url: path,
-      siteName: `${siteConfig.name} Portfolio`,
+      siteName: siteConfig.brandName,
     },
     twitter: {
       card: "summary",

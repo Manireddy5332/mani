@@ -10,7 +10,9 @@ control, build logs, issue trackers, or deployment notes.
 | --- | --- |
 | Platform | Vercel |
 | Project | `manikanta-ai-portfolio` |
-| Production URL | `https://manikanta-ai-portfolio-pi.vercel.app` |
+| Public brand | `Mani Reddy’s Portfolio` |
+| Production URL | `https://manireddys-portfolio.vercel.app` |
+| Transition hostname | `https://manikanta-ai-portfolio-pi.vercel.app` (retained until the new hostname is fully verified) |
 | Framework | Next.js |
 | Node.js | `24.x` |
 | Package manager | `pnpm@11.16.0` through Corepack |
@@ -75,11 +77,16 @@ above remains server-only.
 
 ## Google OAuth production setup
 
-The production Google OAuth Web client is configured with:
+The production Google OAuth Web client is configured with both production
+origins during the verified domain transition:
 
 - authorized JavaScript origin:
-  `https://manikanta-ai-portfolio-pi.vercel.app`
+  `https://manireddys-portfolio.vercel.app`
 - authorized redirect URI:
+  `https://manireddys-portfolio.vercel.app/api/auth/callback/google`
+- transition authorized JavaScript origin:
+  `https://manikanta-ai-portfolio-pi.vercel.app`
+- transition authorized redirect URI:
   `https://manikanta-ai-portfolio-pi.vercel.app/api/auth/callback/google`
 
 The localhost origin and callback remain configured for local testing. Do not

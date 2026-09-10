@@ -1,4 +1,6 @@
 export const siteConfig = {
+  brandName: "Mani Reddy’s Portfolio",
+  adminName: "Mani Reddy’s Portfolio Administrator",
   name: "Manikanta Reddy Anugu",
   shortName: "MRA",
   role: "AI/ML Engineer · Aspiring Researcher · Prospective PhD Student",

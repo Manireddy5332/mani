@@ -28,11 +28,11 @@ const newsreader = Newsreader({
 export const metadata: Metadata = {
   metadataBase: new URL(publicEnvironment.NEXT_PUBLIC_SITE_URL),
   title: {
-    default: `${siteConfig.name} · ${siteConfig.role}`,
-    template: `%s · ${siteConfig.name}`,
+    default: `${siteConfig.brandName} · ${siteConfig.role}`,
+    template: `%s · ${siteConfig.brandName}`,
   },
   description: siteConfig.description,
-  applicationName: `${siteConfig.name} Portfolio`,
+  applicationName: siteConfig.brandName,
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   category: "portfolio",
@@ -51,13 +51,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    title: `${siteConfig.name} · ${siteConfig.role}`,
+    title: `${siteConfig.brandName} · ${siteConfig.role}`,
     description: siteConfig.description,
-    siteName: `${siteConfig.name} Portfolio`,
+    siteName: siteConfig.brandName,
   },
   twitter: {
     card: "summary",
-    title: `${siteConfig.name} · ${siteConfig.role}`,
+    title: `${siteConfig.brandName} · ${siteConfig.role}`,
     description: siteConfig.description,
   },
 };

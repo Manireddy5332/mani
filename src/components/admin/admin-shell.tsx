@@ -2,6 +2,7 @@ import { ShieldCheck } from "lucide-react";
 
 import { SignOutButton } from "@/components/admin/auth-buttons";
 import { AdminNavigation } from "@/components/admin/admin-navigation";
+import { siteConfig } from "@/lib/site";
 
 type AdminShellProps = {
   children: React.ReactNode;
@@ -32,7 +33,7 @@ export function AdminShell({ children, user }: AdminShellProps) {
               Private administration
             </div>
             <p className="mt-2 font-serif text-3xl leading-tight font-medium tracking-[-0.035em] text-ink sm:text-4xl">
-              Portfolio editor
+              {siteConfig.adminName}
             </p>
           </div>
 
