@@ -18,7 +18,7 @@ export function SiteHeader({ className = "" }: SiteHeaderProps) {
           <Link
             href="/"
             className="group inline-flex min-w-0 items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-            aria-label={`${siteConfig.name}, home`}
+            aria-label={`${siteConfig.brandName}, home`}
           >
             <span
               aria-hidden="true"
@@ -28,7 +28,7 @@ export function SiteHeader({ className = "" }: SiteHeaderProps) {
             </span>
             <span className="min-w-0">
               <span className="block truncate text-sm font-semibold tracking-[-0.01em] text-ink">
-                {siteConfig.name}
+                {siteConfig.brandName}
               </span>
               <span className="mt-0.5 block truncate font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted">
                 {siteConfig.role}

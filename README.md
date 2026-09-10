@@ -1,4 +1,4 @@
-# Manikanta Reddy Anugu — Academic + Professional Portfolio
+# Mani Reddy’s Portfolio
 
 A production-oriented academic and professional portfolio for presenting verified work across AI/ML engineering, Generative AI, and research. The application uses the Next.js App Router with a server-only, database-backed public content layer and a private content-management system.
 
@@ -11,7 +11,9 @@ and Phase 10 deployed and verified that architecture without redesigning or
 replacing it.
 
 Production is hosted on Vercel at
-[https://manikanta-ai-portfolio-pi.vercel.app](https://manikanta-ai-portfolio-pi.vercel.app).
+[https://manireddys-portfolio.vercel.app](https://manireddys-portfolio.vercel.app).
+The previous Vercel hostname remains active during the verified domain
+transition.
 The deployment uses the existing Neon database and Google OAuth configuration;
 no new database, seed run, or destructive migration was performed for release.
 
@@ -228,7 +230,7 @@ migrations, seeding, and Studio do require valid credentials.
 ## Production deployment
 
 The application is deployed to Vercel at
-[https://manikanta-ai-portfolio-pi.vercel.app](https://manikanta-ai-portfolio-pi.vercel.app).
+[https://manireddys-portfolio.vercel.app](https://manireddys-portfolio.vercel.app).
 The production environment contract, Google OAuth configuration, controlled
 Prisma release sequence, Vercel settings, verification evidence, and
 redeploy/rollback procedures are documented in

@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 
 import { AdminShell } from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/auth/authorization.server";
+import { siteConfig } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Portfolio administration",
+  title: { absolute: siteConfig.adminName },
   robots: {
     index: false,
     follow: false,
