@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ACADEMIC_CV_LINK } from "@/lib/academic-cv";
 import { siteConfig } from "@/lib/site";
 
 type SiteFooterProps = {
@@ -26,9 +27,12 @@ export function SiteFooter({ className = "" }: SiteFooterProps) {
 
         <div className="md:text-right">
           <nav aria-label="Secondary navigation" className="mb-4 flex flex-wrap gap-x-5 gap-y-2 md:justify-end">
-            <Link className="text-sm font-semibold text-ink transition-colors hover:text-primary" href="/resume">
-              Resume
-            </Link>
+            <a
+              className="text-sm font-semibold text-ink transition-colors hover:text-primary"
+              {...ACADEMIC_CV_LINK}
+            >
+              Academic CV
+            </a>
             <Link className="text-sm font-semibold text-ink transition-colors hover:text-primary" href="/contact">
               Contact
             </Link>

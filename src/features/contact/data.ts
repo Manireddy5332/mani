@@ -19,7 +19,7 @@ export function getContactPageData(): ContactPageData {
         label: "Email",
         value: emailAddress,
         href: links.email,
-        description: "Direct correspondence and academic CV requests.",
+        description: "Direct correspondence for academic and professional inquiries.",
       },
       {
         key: "linkedin",

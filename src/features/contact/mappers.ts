@@ -43,7 +43,9 @@ function socialKind(kind: string): ContactMethod["kind"] {
 }
 
 function socialDescription(kind: ContactMethod["kind"]): string {
-  if (kind === "email") return "Direct correspondence and academic CV requests.";
+  if (kind === "email") {
+    return "Direct correspondence for academic and professional inquiries.";
+  }
   if (kind === "linkedin") return "Professional background and networking.";
   if (kind === "github") return "Public code and project repositories.";
   if (kind === "website") return "An additional public professional website.";

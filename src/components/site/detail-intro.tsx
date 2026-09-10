@@ -38,12 +38,16 @@ export function DetailIntro({
   title,
 }: DetailIntroProps) {
   return (
-    <section className="relative overflow-hidden border-b border-line">
+    <section className="relative isolate overflow-hidden border-b border-line bg-canvas/45">
       <div
         aria-hidden="true"
-        className="foundation-grid pointer-events-none absolute inset-0 opacity-65 [mask-image:linear-gradient(to_bottom,black,transparent_92%)]"
+        className="foundation-grid pointer-events-none absolute inset-0 opacity-70 [mask-image:radial-gradient(ellipse_88%_82%_at_45%_10%,black,transparent)]"
       />
-      <Container className="relative py-16 sm:py-20 lg:py-24">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-40 -right-28 size-[28rem] rounded-full border border-primary/15 bg-primary/[0.03]"
+      />
+      <Container className="relative py-18 sm:py-22 lg:py-28">
         <Reveal>
           <nav aria-label="Breadcrumb">
             <ol className="flex flex-wrap items-center gap-2 font-mono text-[0.72rem] font-semibold tracking-[0.08em] text-subtle uppercase">
@@ -78,17 +82,17 @@ export function DetailIntro({
           </nav>
         </Reveal>
 
-        <div className="mt-10 grid items-end gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.52fr)] lg:gap-14">
+        <div className="mt-12 grid items-end gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.52fr)] lg:gap-16">
           <Reveal>
             <header className="max-w-5xl">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge variant="accent">{eyebrow}</Badge>
                 {status ? <Badge variant="outline">{status}</Badge> : null}
               </div>
-              <h1 className="mt-7 text-balance font-serif text-[clamp(2.65rem,6vw,5.75rem)] leading-[0.95] font-medium tracking-[-0.052em] text-ink [overflow-wrap:anywhere]">
+              <h1 className="mt-8 text-balance font-serif text-[clamp(2.75rem,6vw,5.9rem)] leading-[0.93] font-medium tracking-[-0.055em] text-ink [overflow-wrap:anywhere]">
                 {title}
               </h1>
-              <div className="mt-7 max-w-3xl text-pretty text-base leading-8 text-muted sm:text-lg sm:leading-9">
+              <div className="mt-8 max-w-3xl border-l-2 border-primary/55 pl-5 text-pretty text-base leading-8 text-muted sm:pl-7 sm:text-lg sm:leading-9">
                 {description}
               </div>
               {actions ? (
@@ -98,7 +102,17 @@ export function DetailIntro({
           </Reveal>
 
           <Reveal delay={0.08}>
-            <Surface as="aside" aria-label={`${currentLabel} details`} padding="lg" variant="raised">
+            <Surface
+              as="aside"
+              aria-label={`${currentLabel} details`}
+              className="relative overflow-hidden bg-surface/90 backdrop-blur-sm"
+              padding="lg"
+              variant="raised"
+            >
+              <span
+                aria-hidden="true"
+                className="absolute top-0 right-8 left-8 h-px bg-gradient-to-r from-transparent via-primary to-transparent"
+              />
               <p className="eyebrow text-primary">At a glance</p>
               <dl className="mt-6 divide-y divide-line border-y border-line">
                 {metadata.map((item) => (

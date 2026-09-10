@@ -63,7 +63,7 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
         }
       />
 
-      <section className="border-b border-line py-18 sm:py-24 lg:py-28">
+      <section className="relative border-b border-line bg-surface/35 py-18 sm:py-24 lg:py-28">
         <Container>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.38fr)_minmax(0,1fr)] lg:gap-16">
             <Reveal>
@@ -74,11 +74,24 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
               />
             </Reveal>
             <Reveal delay={0.06}>
-              <Surface as="article" padding="lg" variant="raised">
-                <h3 className="font-serif text-3xl leading-tight font-medium tracking-[-0.035em] sm:text-4xl">
+              <Surface
+                as="article"
+                className="relative overflow-hidden shadow-lift"
+                padding="lg"
+                variant="raised"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-primary to-secondary"
+                />
+                <span
+                  aria-hidden="true"
+                  className="absolute -top-20 -right-16 size-52 rounded-full bg-primary/[0.055] blur-3xl"
+                />
+                <h3 className="relative font-serif text-3xl leading-tight font-medium tracking-[-0.035em] sm:text-4xl">
                   Overview
                 </h3>
-                <p className="mt-5 text-base leading-8 text-muted sm:text-lg">
+                <p className="relative mt-5 text-base leading-8 text-muted sm:text-lg">
                   {project.summary}
                 </p>
               </Surface>
@@ -105,11 +118,26 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
               {project.learningFeatures.map((feature, index) => (
                 <li key={`${index}-${feature}`}>
                   <Reveal className="h-full" delay={index * 0.04}>
-                    <Surface as="article" className="h-full" padding="lg" variant="subtle">
-                      <p className="eyebrow text-primary">
+                    <Surface
+                      as="article"
+                      className="group relative h-full min-h-52 overflow-hidden transition-[border-color,transform,box-shadow,background-color] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:bg-canvas hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                      padding="lg"
+                      variant="subtle"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-x-0 top-0 h-1 origin-left scale-x-50 bg-gradient-to-r from-primary to-secondary transition-transform duration-500 group-hover:scale-x-100 motion-reduce:transition-none"
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="absolute -right-2 -bottom-8 font-serif text-[7rem] leading-none font-medium tracking-[-0.08em] text-primary/[0.045] transition-transform duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2 motion-reduce:transform-none motion-reduce:transition-none"
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <p className="relative eyebrow text-primary">
                         Feature {String(index + 1).padStart(2, "0")}
                       </p>
-                      <h3 className="mt-6 font-serif text-2xl leading-tight font-medium tracking-[-0.03em]">
+                      <h3 className="relative mt-6 font-serif text-2xl leading-tight font-medium tracking-[-0.03em] transition-colors duration-200 group-hover:text-primary motion-reduce:transition-none">
                         {feature}
                       </h3>
                     </Surface>
@@ -127,7 +155,7 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
         </Container>
       </section>
 
-      <section className="border-b border-line py-18 sm:py-24 lg:py-28">
+      <section className="border-b border-line bg-surface/20 py-18 sm:py-24 lg:py-28">
         <Container>
           <Reveal>
             <SectionHeading
@@ -145,11 +173,20 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
               {project.contributions.map((contribution, index) => (
                 <li key={`${index}-${contribution.label}`}>
                   <Reveal className="h-full" delay={index * 0.05}>
-                    <Surface as="article" className="h-full" padding="lg" variant="raised">
+                    <Surface
+                      as="article"
+                      className="group relative h-full overflow-hidden transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-secondary/40 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                      padding="lg"
+                      variant="raised"
+                    >
+                      <span
+                        aria-hidden="true"
+                        className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-secondary to-primary opacity-65 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:transition-none"
+                      />
                       <p className="eyebrow text-secondary">
                         Contribution {String(index + 1).padStart(2, "0")}
                       </p>
-                      <h3 className="mt-6 font-serif text-3xl leading-tight font-medium tracking-[-0.035em]">
+                      <h3 className="mt-6 font-serif text-3xl leading-tight font-medium tracking-[-0.035em] transition-colors duration-200 group-hover:text-secondary motion-reduce:transition-none">
                         {contribution.label}
                       </h3>
                       <p className="mt-4 text-sm leading-7 text-muted">
@@ -170,7 +207,7 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
         </Container>
       </section>
 
-      <section className="border-b border-line py-18 sm:py-24 lg:py-28">
+      <section className="foundation-grid relative border-b border-line py-18 sm:py-24 lg:py-28">
         <Container>
           <div className="grid gap-10 lg:grid-cols-[minmax(0,0.42fr)_minmax(0,1fr)] lg:gap-16">
             <Reveal>
@@ -182,13 +219,22 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
               />
             </Reveal>
             <Reveal delay={0.06}>
-              <Surface as="article" padding="lg" variant="accent">
-                <h3 className="font-serif text-3xl leading-tight font-medium tracking-[-0.035em]">
+              <Surface
+                as="article"
+                className="relative overflow-hidden shadow-[0_24px_70px_-52px_rgb(20_25_35/0.45)]"
+                padding="lg"
+                variant="accent"
+              >
+                <span
+                  aria-hidden="true"
+                  className="absolute -top-24 -right-20 size-56 rounded-full border border-primary/10 bg-primary/[0.04]"
+                />
+                <h3 className="relative font-serif text-3xl leading-tight font-medium tracking-[-0.035em]">
                   Technologies
                 </h3>
                 {project.technologies.length > 0 ? (
                   <ul
-                    className="mt-7 flex flex-wrap gap-2"
+                    className="relative mt-7 flex flex-wrap gap-2"
                     aria-label="Project technologies"
                   >
                     {project.technologies.map((technology, index) => (
@@ -209,12 +255,12 @@ export function ProjectDetailPage({ project }: ProjectDetailPageProps) {
       </section>
 
       {project.repository ? (
-        <section className="border-b border-line py-18 sm:py-24 lg:py-28">
+        <section className="border-b border-line bg-surface/30 py-18 sm:py-24 lg:py-28">
           <Container>
             <Reveal>
               <Surface
                 as="article"
-                className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between"
+                className="relative flex flex-col gap-7 overflow-hidden shadow-lift lg:flex-row lg:items-end lg:justify-between"
                 padding="lg"
                 variant="raised"
               >
