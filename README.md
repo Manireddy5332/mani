@@ -12,8 +12,9 @@ replacing it.
 
 Production is hosted on Vercel at
 [https://manireddys-portfolio.vercel.app](https://manireddys-portfolio.vercel.app).
-The previous Vercel hostname remains active during the verified domain
-transition.
+The domain transition is complete. The previous hostname,
+`https://manikanta-ai-portfolio-pi.vercel.app`, is retained only as a permanent
+308 redirect to the primary domain, preserving request paths.
 The deployment uses the existing Neon database and Google OAuth configuration;
 no new database, seed run, or destructive migration was performed for release.
 
@@ -161,10 +162,19 @@ The private administrator flow expects these server-only names:
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`: a Google OAuth Web client
 - `ADMIN_EMAIL`: the one verified Google address allowed into `/admin`
 
-In the Google Cloud OAuth client, configure:
+For local development, retain these entries in the existing Google OAuth Web
+client alongside its production entries:
 
 - authorized JavaScript origin: `http://localhost:3000`
 - authorized redirect URI: `http://localhost:3000/api/auth/callback/google`
+
+Local `NEXT_PUBLIC_SITE_URL` and `BETTER_AUTH_URL` both use
+`http://localhost:3000`; production uses the primary HTTPS origin for both.
+The [deployment guide](docs/production-deployment.md#google-oauth-local-and-production-configuration)
+records the exact production and retained legacy entries. Do not remove the
+localhost entries while this client supports local sign-in. A separate
+development client is an optional future isolation change, not a prerequisite
+for the current working configuration.
 
 Better Auth is self-hosted and needs no Better Auth account. A Google account
 that authenticates successfully but does not exactly match the normalized,
@@ -247,8 +257,12 @@ Production must use one canonical HTTPS origin for both
 `NEXT_PUBLIC_SITE_URL` and `BETTER_AUTH_URL`. Runtime database/auth traffic uses
 the pooled Neon `DATABASE_URL`. Vercel request-serving functions do not receive
 `DIRECT_URL`; controlled Prisma migration commands use the matching direct URL
-outside the runtime environment. Localhost values, local OAuth secrets, and
-local database credentials must not be copied into production.
+outside the runtime environment. Do not copy the local environment file into
+production: application origins and `BETTER_AUTH_SECRET` are environment-specific,
+and database credentials must target the approved database for that environment.
+The current Google OAuth Web client is explicitly authorized for both local and
+production callbacks; keep its credentials in the appropriate secret stores,
+never in source control.
 
 ## Schema, migration, and seed strategy
 

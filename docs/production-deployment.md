@@ -12,7 +12,7 @@ control, build logs, issue trackers, or deployment notes.
 | Project | `manikanta-ai-portfolio` |
 | Public brand | `Mani Reddy’s Portfolio` |
 | Production URL | `https://manireddys-portfolio.vercel.app` |
-| Transition hostname | `https://manikanta-ai-portfolio-pi.vercel.app` (retained until the new hostname is fully verified) |
+| Redirect-only hostname | `https://manikanta-ai-portfolio-pi.vercel.app` (permanent 308 redirect to the primary domain, preserving request paths) |
 | Framework | Next.js |
 | Node.js | `24.x` |
 | Package manager | `pnpm@11.16.0` through Corepack |
@@ -20,6 +20,12 @@ control, build logs, issue trackers, or deployment notes.
 | Output | Next.js framework default |
 | Function region | `iad1` |
 | Database | Existing Neon PostgreSQL database |
+
+The domain transition and new-domain authentication verification are complete.
+The primary domain serves the portfolio and administrator sign-in. The old
+hostname is retained only for the permanent redirect, not as a second canonical
+site or authentication origin used by the application. Production
+`NEXT_PUBLIC_SITE_URL` and `BETTER_AUTH_URL` use the primary domain above.
 
 The Vercel project is linked to GitHub repository `Manireddy5332/mani`, with
 `main` configured as the production branch. The original Phase 10 release was
@@ -61,7 +67,7 @@ fragments.
 
 | Name | Production requirement |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical public HTTPS origin, such as `https://portfolio.example`. This is intentionally public and is embedded at build time. |
+| `NEXT_PUBLIC_SITE_URL` | `https://manireddys-portfolio.vercel.app`, the canonical public HTTPS origin. This is intentionally public and is embedded at build time. |
 | `BETTER_AUTH_URL` | The exact same HTTPS origin as `NEXT_PUBLIC_SITE_URL`. |
 | `BETTER_AUTH_SECRET` | A new high-entropy production secret of at least 32 characters. Do not reuse the local value. |
 | `GOOGLE_CLIENT_ID` | Client ID for a Google OAuth Web application authorized for the production origin. |
@@ -75,26 +81,38 @@ fragments.
 Only `NEXT_PUBLIC_SITE_URL` is permitted in browser bundles. Every other value
 above remains server-only.
 
-## Google OAuth production setup
+## Google OAuth local and production configuration
 
-The production Google OAuth Web client is configured with both production
-origins during the verified domain transition:
+The existing Google OAuth Web client supports local development and the primary
+production domain. Its explicitly authorized entries are:
 
-- authorized JavaScript origin:
-  `https://manireddys-portfolio.vercel.app`
-- authorized redirect URI:
-  `https://manireddys-portfolio.vercel.app/api/auth/callback/google`
-- transition authorized JavaScript origin:
-  `https://manikanta-ai-portfolio-pi.vercel.app`
-- transition authorized redirect URI:
-  `https://manikanta-ai-portfolio-pi.vercel.app/api/auth/callback/google`
+| Purpose | Authorized JavaScript origin | Authorized redirect URI |
+| --- | --- | --- |
+| Local development | `http://localhost:3000` | `http://localhost:3000/api/auth/callback/google` |
+| Primary production | `https://manireddys-portfolio.vercel.app` | `https://manireddys-portfolio.vercel.app/api/auth/callback/google` |
+| Retained legacy entry | `https://manikanta-ai-portfolio-pi.vercel.app` | `https://manikanta-ai-portfolio-pi.vercel.app/api/auth/callback/google` |
 
-The localhost origin and callback remain configured for local testing. Do not
-remove them unless local Google sign-in is intentionally retired.
+Local `NEXT_PUBLIC_SITE_URL` and `BETTER_AUTH_URL` both use
+`http://localhost:3000`. In Production, both use
+`https://manireddys-portfolio.vercel.app`, so production sign-in and callbacks use
+the new hostname. The legacy OAuth entries remain authorized, but the old
+hostname now only redirects to the primary domain; do not use it for new
+sign-in flows or canonical URLs. Any later removal of legacy OAuth entries is
+a separate, explicitly approved configuration change.
+
+Retain the localhost entries while this shared client supports local sign-in;
+removing them would break that flow. Separate local and production OAuth clients
+are an optional future isolation enhancement, not a requirement for this
+configuration. If that change is approved later, configure and verify the
+development client's exact local origin and callback and update only the local
+Google credentials before removing localhost entries from the production
+client. Keep all credentials server-only in the appropriate environment secret
+stores, and use separate local and production `BETTER_AUTH_SECRET` values.
 
 The scheme, host, port, path, and trailing-slash behavior must match exactly.
-Remove localhost from the production OAuth client or use a separate local
-client. Confirm the OAuth consent screen, domain verification, administrator
+Google permits localhost callback URIs for testing; see its
+[Web Server OAuth documentation](https://developers.google.com/identity/protocols/oauth2/web-server#creatingcred).
+Confirm the OAuth consent screen, domain verification, administrator
 account/test-user status, and any Google-required homepage, privacy-policy, and
 terms links before publishing the OAuth application. Legal-policy text must be
 provided and approved by the site owner; it is not generated by this project.
