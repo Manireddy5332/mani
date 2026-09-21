@@ -20,6 +20,15 @@ export async function readHomePageFromDatabase(): Promise<HomePageData | null> {
       positioning: true,
       introduction: true,
       location: true,
+      avatar: {
+        select: {
+          id: true,
+          provider: true,
+          mimeType: true,
+          width: true,
+          height: true,
+        },
+      },
       socialLinks: {
         where: {
           status: ContentStatus.PUBLISHED,

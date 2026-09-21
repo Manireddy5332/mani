@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { AdminNestedContentEditor } from "@/components/admin/admin-nested-content-editor";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { AdminProfilePhoto } from "@/components/admin/admin-profile-photo";
 import { AdminResourceForm } from "@/components/admin/admin-resource-form";
 import {
   getAdminRelationResources,
@@ -75,6 +76,11 @@ export default async function EditAdminRecordPage({
           resource={resource}
         />
       </div>
+      {resource.key === "profile" ? (
+        <div className="mt-14 border-t border-line pt-10">
+          <AdminProfilePhoto key={id} profileId={id} />
+        </div>
+      ) : null}
       {nestedContent ? (
         <div className="mt-14 border-t border-line pt-10">
           <AdminNestedContentEditor content={nestedContent} />

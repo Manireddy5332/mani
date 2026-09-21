@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { getProfilePageData } from "./data";
 import {
   mapPublicProfileRecord,
   mapPublicResumeRecord,
@@ -18,6 +19,7 @@ function profileRecord(
     introduction: "Verified introduction",
     about: ["Verified profile paragraph."],
     location: null,
+    avatar: null,
     experiences: [],
     educationRecords: [],
     researchInterests: [],
@@ -120,6 +122,50 @@ test("keeps successful empty profile relations empty", () => {
   assert.equal(result.research, null);
   assert.deepEqual(result.expertise, []);
   assert.deepEqual(result.certifications, []);
+  assert.equal(result.photo, null);
+});
+
+test("profile photo exposes only normalized display data, never storage metadata", () => {
+  const asset = {
+    id: "693a19d8-d5db-4a57-b99b-da37849a5a25",
+    provider: "vercel-blob-private-profile-photo",
+    mimeType: "image/webp",
+    width: 640,
+    height: 800,
+    storageKey: "private-storage-key-not-for-public-output",
+    originalFilename: "private-filename.webp",
+  };
+  const result = mapPublicProfileRecord(profileRecord({ avatar: asset }));
+
+  assert.equal(result.photo?.src, `/profile-photo/${asset.id}`);
+  assert.deepEqual(Object.keys(result.photo ?? {}).sort(), [
+    "alt",
+    "height",
+    "src",
+    "width",
+  ]);
+  assert.doesNotMatch(
+    JSON.stringify(result),
+    /private-storage-key|private-filename/,
+  );
+  assert.deepEqual(result.progression, profileRecord().about);
+});
+
+test("profile gracefully omits invalid image metadata and static fallback has no photo", () => {
+  const result = mapPublicProfileRecord(
+    profileRecord({
+      avatar: {
+        id: "693a19d8-d5db-4a57-b99b-da37849a5a25",
+        provider: "vercel-blob-private-profile-photo",
+        mimeType: "image/webp",
+        width: null,
+        height: 800,
+      },
+    }),
+  );
+
+  assert.equal(result.photo, null);
+  assert.equal(getProfilePageData().photo, null);
 });
 
 test("maps only safe public resume and professional-link URLs", () => {

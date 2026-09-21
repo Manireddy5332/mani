@@ -15,6 +15,7 @@ export function getProfilePageData(): ProfilePageData {
     positioning: identity.positioning,
     introduction: identity.introduction,
     location: identity.location,
+    photo: null,
     progression: [
       `My professional path spans data science and AI/ML engineering. I worked as a ${experience[1].role} on a client engagement with ${experience[1].organization} and currently work as a ${experience[0].role} on a client engagement with ${experience[0].organization}.`,
       "Across these roles, my work has included machine learning, generative AI, retrieval-augmented generation, forecasting, NLP, MLOps, model monitoring, and data engineering.",
