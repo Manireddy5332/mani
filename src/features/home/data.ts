@@ -4,7 +4,7 @@ import type { HomePageData } from "./types";
 
 export function getStaticHomePageData(): HomePageData {
   return {
-    identity: portfolioContent.identity,
+    identity: { ...portfolioContent.identity, photo: null },
     links: {
       email: portfolioContent.links.email,
       linkedIn: portfolioContent.links.linkedIn,

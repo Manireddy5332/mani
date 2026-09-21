@@ -1,3 +1,4 @@
+import { toPublicProfilePhoto } from "@/features/profile-photo/policy";
 import {
   formatMonthYear,
   formatPartialPeriod,
@@ -25,6 +26,7 @@ export type PublicProfileRecord = Readonly<{
   introduction: string;
   about: readonly string[];
   location: string | null;
+  avatar: Parameters<typeof toPublicProfilePhoto>[0];
   experiences: readonly (PartialPeriodRecord &
     Readonly<{
       type: string;
@@ -185,6 +187,7 @@ export function mapPublicProfileRecord(
     positioning: record.positioning,
     introduction: record.introduction,
     location: record.location,
+    photo: toPublicProfilePhoto(record.avatar, record.name),
     progression: record.about,
     experience: record.experiences.map((experience) => ({
       engagement: formatEnumLabel(experience.type),

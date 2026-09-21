@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { ResearchConstellation } from "@/components/site/research-constellation";
+import { ProfilePhoto } from "@/components/site/profile-photo";
 import { EvidenceAtlas } from "@/components/site/system-flow";
 import {
   Badge,
@@ -26,6 +27,7 @@ import {
   Surface,
 } from "@/components/ui";
 import { ACADEMIC_CV_LINK } from "@/lib/academic-cv";
+import { cn } from "@/lib/cn";
 import type { HomePageData } from "@/features/home";
 
 type OverviewCard = {
@@ -109,7 +111,12 @@ export function PersonalPortfolioHome({ home }: PersonalPortfolioHomeProps) {
           className="pointer-events-none absolute -top-56 -right-48 size-[42rem] rounded-full border border-primary/15 bg-primary/[0.035]"
         />
         <Container className="relative py-20 sm:py-28 lg:min-h-[calc(100svh-5rem)] lg:py-32">
-          <div className="grid min-h-full items-center gap-14 lg:grid-cols-[minmax(0,1.25fr)_minmax(21rem,0.68fr)] lg:gap-20">
+          <div
+            className={cn(
+              "grid min-h-full items-center gap-14 lg:grid-cols-[minmax(0,1.25fr)_minmax(21rem,0.68fr)] lg:gap-20",
+              home.identity.photo && "items-start",
+            )}
+          >
             <Reveal>
               <div className="max-w-5xl">
                 <div className="flex flex-wrap items-center gap-3">
@@ -182,9 +189,21 @@ export function PersonalPortfolioHome({ home }: PersonalPortfolioHomeProps) {
               </div>
             </Reveal>
 
-            <Reveal className="relative" delay={0.1}>
-              <ResearchConstellation className="pointer-events-none absolute -top-28 -right-36 hidden h-[38rem] w-[42rem] max-w-none opacity-90 lg:block" />
-              <div className="relative lg:py-10">
+            {home.identity.photo ? (
+              <Reveal className="relative lg:pt-12" delay={0.1}>
+                <ResearchConstellation className="pointer-events-none absolute -top-28 -right-36 hidden h-[38rem] w-[42rem] max-w-none opacity-90 lg:block" />
+                <ProfilePhoto photo={home.identity.photo} variant="hero" />
+              </Reveal>
+            ) : null}
+
+            <Reveal
+              className={cn("relative", home.identity.photo && "lg:col-span-2")}
+              delay={0.1}
+            >
+              {!home.identity.photo ? (
+                <ResearchConstellation className="pointer-events-none absolute -top-28 -right-36 hidden h-[38rem] w-[42rem] max-w-none opacity-90 lg:block" />
+              ) : null}
+              <div className={cn("relative", !home.identity.photo && "lg:py-10")}>
                 <Surface
                   as="aside"
                   aria-labelledby="profile-index-title"

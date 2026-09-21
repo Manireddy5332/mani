@@ -19,6 +19,11 @@ const privateRouteHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  images: {
+    // CMS portraits are upload-optimized and publication-gated on every request.
+    // Do not let the shared image optimizer retain a removed or unpublished photo.
+    localPatterns: [{ pathname: "/_next/static/media/**", search: "" }],
+  },
   async headers() {
     return [
       {

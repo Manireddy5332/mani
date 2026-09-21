@@ -26,6 +26,15 @@ function createProfileSelect(now: Date) {
     introduction: true,
     about: true,
     location: true,
+    avatar: {
+      select: {
+        id: true,
+        provider: true,
+        mimeType: true,
+        width: true,
+        height: true,
+      },
+    },
     experiences: {
       where: { status: ContentStatus.PUBLISHED },
       orderBy: [

@@ -1,3 +1,5 @@
+import type { PublicProfilePhoto } from "@/features/profile-photo/types";
+
 export type HomeExperience = Readonly<{
   engagement: string;
   organization: string;
@@ -40,6 +42,7 @@ export type HomePageData = Readonly<{
     positioning: readonly string[];
     introduction: string;
     location: string | null;
+    photo: PublicProfilePhoto | null;
   }>;
   links: Readonly<{
     email: string | null;

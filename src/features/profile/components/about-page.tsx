@@ -15,6 +15,7 @@ import {
   SectionHeading,
   Surface,
 } from "@/components/ui";
+import { ProfilePhoto } from "@/components/site/profile-photo";
 import { ACADEMIC_CV_LINK } from "@/lib/academic-cv";
 
 import type { ProfilePageData } from "../types";
@@ -116,6 +117,7 @@ export function AboutPage({ profile }: AboutPageProps) {
                 className="absolute -top-16 -right-16 size-40 rounded-full bg-primary/10 blur-2xl"
               />
               <p className="eyebrow relative text-primary">At a glance</p>
+              <ProfilePhoto photo={profile.photo} />
               <dl className="relative mt-7 divide-y divide-line">
                 {profile.location ? (
                   <div className="py-5 first:pt-0 last:pb-0">

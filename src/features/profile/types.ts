@@ -1,3 +1,5 @@
+import type { PublicProfilePhoto } from "@/features/profile-photo/types";
+
 export type ProfileExperience = {
   readonly engagement: string;
   readonly organization: string;
@@ -43,6 +45,7 @@ export type ProfilePageData = {
   readonly introduction: string;
   readonly location: string | null;
   readonly progression: readonly string[];
+  readonly photo: PublicProfilePhoto | null;
   readonly experience: readonly ProfileExperience[];
   readonly education: readonly ProfileEducation[];
   readonly research: ResearchDirection | null;

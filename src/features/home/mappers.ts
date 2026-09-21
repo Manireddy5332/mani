@@ -1,3 +1,4 @@
+import { toPublicProfilePhoto } from "@/features/profile-photo/policy";
 import { formatPartialPeriod } from "@/lib/public-content/dates";
 
 import type { HomePageData } from "./types";
@@ -15,6 +16,7 @@ export type PublicHomeRecord = Readonly<{
   positioning: readonly string[];
   introduction: string;
   location: string | null;
+  avatar: Parameters<typeof toPublicProfilePhoto>[0];
   socialLinks: readonly Readonly<{
     kind: string;
     url: string;
@@ -94,6 +96,7 @@ export function mapPublicHomeRecord(record: PublicHomeRecord): HomePageData {
       positioning: record.positioning,
       introduction: record.introduction,
       location: record.location,
+      photo: toPublicProfilePhoto(record.avatar, record.name),
     },
     links: {
       email: safeLink(email?.url ?? null, "mailto"),
