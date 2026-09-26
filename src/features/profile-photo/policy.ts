@@ -14,6 +14,11 @@ export const photoMutationSchema = z.object({
 }).strict();
 export const PHOTO_CONTENT_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
 
+/** Configuration presence only; Blob's SDK resolves and validates credentials. */
+export function hasPhotoStorageBinding(storeId: string | undefined, readWriteToken: string | undefined): boolean {
+  return Boolean(storeId?.trim() || readWriteToken?.trim());
+}
+
 export class ProfilePhotoError extends Error {
   constructor(public readonly status: number, message: string) {
     super(message);
