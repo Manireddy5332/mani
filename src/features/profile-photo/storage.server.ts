@@ -2,10 +2,12 @@ import "server-only";
 
 import { del, get, put } from "@vercel/blob";
 
-import { ProfilePhotoError, isOwnedPhotoKey } from "./policy";
+import { ProfilePhotoError, hasPhotoStorageBinding, isOwnedPhotoKey } from "./policy";
 
 export function isPhotoStorageConfigured(): boolean {
-  return Boolean((process.env.BLOB_STORE_ID?.trim() && process.env.VERCEL_OIDC_TOKEN?.trim()) || process.env.BLOB_READ_WRITE_TOKEN?.trim());
+  // Runtime OIDC is request-scoped, not necessarily in process.env. Detect the
+  // store binding here; the existing SDK handles runtime credentials and auth.
+  return hasPhotoStorageBinding(process.env.BLOB_STORE_ID, process.env.BLOB_READ_WRITE_TOKEN);
 }
 
 export function assertPhotoStorage(): void {

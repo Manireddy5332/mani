@@ -3,6 +3,7 @@ import test from "node:test";
 
 import {
   assertPhotoOrigin,
+  hasPhotoStorageBinding,
   isOwnedPhotoKey,
   PHOTO_EDGE,
   PHOTO_PROVIDER,
@@ -14,6 +15,24 @@ import {
 const profileId = "11111111-1111-4111-8111-111111111111";
 const assetId = "22222222-2222-4222-8222-222222222222";
 const asset = { id: assetId, provider: PHOTO_PROVIDER, mimeType: "image/webp", width: 480, height: 640 };
+
+test("OIDC storage binding is detected without a build-time token environment variable", () => {
+  assert.equal(hasPhotoStorageBinding("test-only-store-id", undefined), true);
+  assert.equal(hasPhotoStorageBinding("  test-only-store-id  ", ""), true);
+});
+
+test("local read-write token configuration still works without an OIDC store binding", () => {
+  assert.equal(hasPhotoStorageBinding(undefined, "test-only-local-token"), true);
+  assert.equal(hasPhotoStorageBinding("", "  test-only-local-token  "), true);
+});
+
+test("disconnected Preview and blank storage configuration remain disabled", () => {
+  for (const storeId of [undefined, "", "  "]) {
+    for (const readWriteToken of [undefined, "", "  "]) {
+      assert.equal(hasPhotoStorageBinding(storeId, readWriteToken), false);
+    }
+  }
+});
 
 test("photo mutation accepts only a profile id and an explicit current-avatar revision", () => {
   assert.equal(photoMutationSchema.safeParse({ profileId, expectedAvatarId: null }).success, true);
