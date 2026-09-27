@@ -6,29 +6,48 @@ Replacement is a separate save; **Remove photo** requires confirmation. These
 operations do not resubmit profile text, publication state, or other CMS fields.
 Only the published primary profile displays its selected photo on Home and About.
 
-## Development storage setup
+## Current Production status — verified 2026-09-27
+
+The feature is **deployed and verified in Production** at
+<https://manireddys-portfolio.vercel.app>. The owner uploaded and saved the current
+portrait through Profile & About; Home and About display it successfully. The
+approved hero placement, size, and responsive behavior are preserved.
+
+## Storage configuration
+
+The existing Vercel project uses separate private Blob stores:
+
+- **Production:** `mani-profile-photo-prod`, connected to Production only, with
+  Vercel-managed OIDC enabled.
+- **Development:** `mani-profile-photo-dev`, connected to Development only.
+- **Preview:** no Blob store connection; photo controls remain safely disabled.
 
 The private `mani-profile-photo-dev` Blob store has already been created and
 connected to **Development only** in the existing Vercel project. Do not recreate
 it or connect it to Preview or Production. No store is created by the application
-or its build. Billing, further environment connections, and deployment each require
-separate approval.
+or its build. Future billing, environment connections, and deployments require
+the normal approvals; the completed release does not authorize further changes.
 
-The `@vercel/blob` SDK uses `BLOB_STORE_ID` with Vercel-managed
-`VERCEL_OIDC_TOKEN` on Vercel. Let the SDK obtain and refresh the token; never pass
-it through the UI or manually copy it into code. A server-only
-`BLOB_READ_WRITE_TOKEN` for that private store is supported for local development.
+The `@vercel/blob` SDK uses `BLOB_STORE_ID` with Vercel-managed OIDC on Vercel.
+Runtime credentials are request-scoped and are not necessarily available as
+`process.env.VERCEL_OIDC_TOKEN`. The application detects the store binding; the
+SDK resolves and validates the runtime credentials. Never copy tokens into code
+or pass them through the UI. Production does not require a long-lived read-write
+token. A server-only `BLOB_READ_WRITE_TOKEN` for the Development store is supported
+for local development.
 The store may provision additional webhook variables, but this feature does not
 use browser uploads or webhooks. No `NEXT_PUBLIC_*` storage variable is needed.
 
 Local Development credentials are configured in the Git-ignored `.env.local`;
 existing authentication and database settings were preserved. A real portrait has
-been uploaded successfully using the isolated test environment below. Never paste credentials into chat or
-overwrite `.env.local` with an environment pull. A store connection/environment
-update takes effect in a new Vercel deployment; no deployment is approved yet.
+been uploaded successfully using the isolated test environment described below.
+Never paste credentials into chat or overwrite `.env.local` with an environment
+pull. Future store connection/environment updates require a new approved Vercel
+deployment to take effect.
 
-Until storage credentials are available, only the photo controls are disabled.
-The rest of the existing portfolio and CMS remain usable.
+In an environment without a storage binding, only the photo controls are disabled.
+The rest of the existing portfolio and CMS remain usable. Production storage is
+configured and its photo controls are working.
 
 ## Implementation and privacy
 
@@ -58,17 +77,18 @@ The rest of the existing portfolio and CMS remain usable.
   storage deletion may leave an unreferenced private blob for later manual cleanup.
   Never automatically delete a blob that might still be selected.
 
-## Verification before release
+## Regression testing for future changes
 
 Run `pnpm db:validate`, `pnpm typecheck`, `pnpm lint`, `pnpm test`, and `pnpm build`.
 Unit tests use in-memory image fixtures and mocked storage/database operations;
 they must not upload test portraits to production or alter existing records.
 
-Before live sign-in or photo-save testing, confirm that the running process's
+Before live mutation/regression testing, confirm that the running process's
 `DATABASE_URL` and `DIRECT_URL` target an isolated non-production Neon database.
 This was verified for the temporary `profile-photo-dev` branch and its
-`portfolio_photo_test` database. The branch expires on **2026-09-22 at 21:58 UTC**;
-never use it after expiry without re-verifying the environment. The ignored local
+`portfolio_photo_test` database. That test branch's expiry was **2026-09-22 at
+21:58 UTC**; it is not a current test target. Stop for approval and re-verify an
+isolated environment before any further live mutation tests. The ignored local
 test harness overrides both connections in memory and leaves `.env.local`
 unchanged. Do not start ordinary `pnpm dev` for this isolated test, because the
 existing `.env.local` database settings are not the test target.
@@ -86,7 +106,7 @@ fallback. Also verify signed-out and non-admin upload/preview requests are denie
 Do not upload a placeholder portrait or modify existing production content to test
 this feature without explicit approval.
 
-## Verification checkpoint — 2026-09-20
+## Historical local verification checkpoint — 2026-09-20
 
 - Prisma validation and generation, lint, TypeScript, all 127 automated tests,
   and the local production build passed. The build used the isolated test database.
@@ -114,42 +134,40 @@ this feature without explicit approval.
   cache revalidated; final Home/About image and route checks passed. No application
   code or cache-policy change was made. Console/hydration checks were clear.
 - The original JPEG is a local restore/test input, not a bundled public asset;
-  keep it out of the eventual commit. `.env.local` was not changed.
+  it remains untracked and must stay out of future commits. `.env.local` was not changed.
 
-## Production release gates
+## Completed Production release and verification
 
-1. The isolated live cycle and local release checks are complete. Repeat relevant
-   checks if implementation changes before release; do not alter the approved layout.
-2. The owner created the separate private `mani-profile-photo-prod` store and
-   corrected its environment scope. The final read-only Vercel inspection on
-   2026-09-21 confirms that its active project connection and `BLOB_STORE_ID` are
-   **Production only**. The private `mani-profile-photo-dev` store and its
-   `BLOB_READ_WRITE_TOKEN` remain **Development only**; Preview has neither Blob
-   connection. The prior Preview-scope blocker is resolved. No storage settings
-   were changed by the agent. Stop before billing, upgrades, or account actions.
-3. Project OIDC is enabled and Production has `BLOB_STORE_ID`; Vercel manages the
-   short-lived runtime token. No Production read-write token is required by this
-   implementation. These are configuration checks, not a deployed photo round trip.
-   Keep storage credentials in Vercel's protected environment configuration only.
-   Never copy local test database credentials into Vercel.
-   No Prisma schema change, migration, reseed, or test-data copy is needed.
-4. Review and approve the feature branch/PR and deployment separately. A push may
-   create a Preview deployment; it must not silently connect Development storage
-   to Preview or Production. Photo controls safely remain disabled without storage.
-5. After the approved production release, the owner uploads the intended portrait
-   through Profile & About. Do not automatically copy the isolated test avatar,
-   media metadata, or other CMS data into production. Verify public rendering,
-   signed-out protection, and photo-only updates without editing existing text.
+- [PR #5](https://github.com/Manireddy5332/mani/pull/5) delivered the feature.
+  [PR #6](https://github.com/Manireddy5332/mani/pull/6) fixed storage detection to
+  accept the OIDC store binding without requiring a build-time token in the
+  runtime environment. SDK authorization remains unchanged.
+- At the final audit, GitHub `main` and the READY Vercel Production deployment
+  matched merge commit `efb39822a9cc0a5566d55621eef925577946d3ac`. Production uses
+  the private Production-only store through OIDC; Development remains isolated
+  and Preview remains disconnected.
+- The owner completed the Production upload. Home and About serve the saved
+  metadata-stripped WebP through the controlled, non-cacheable image route.
+  Authenticated admin preview and **Reload photo controls** work, and the former
+  storage-not-configured warning is absent.
+- All **130 automated tests** and **43 live HTTP checks** passed. Unauthenticated
+  admin routes redirect to sign-in; photo metadata and preview requests without
+  a session are denied. Authorization, validation, replacement, removal, and
+  cache/privacy safeguards remain covered by the automated suite and the earlier
+  isolated live cycle. Destructive photo tests were not repeated in Production.
+- Home/About rendering and responsive layouts passed. Academic CV bytes match
+  the reviewed file, and research, project, experience, and other public routes
+  remain available. Browser console/hydration checks were clear on the inspected
+  Home and authenticated admin views.
+- The read-only database inventory found one published primary profile linked to
+  one private photo asset, the two existing migrations applied, and no unrelated
+  content records updated since the feature merge. No schema change, migration,
+  reseed, or Development-data transfer was needed for the feature.
+- The final audit did not change Production content, storage configuration, or
+  the current photo. No tracked secrets, temporary debug logging, or local test
+  artifacts were found. The original local `Image.jpeg` was preserved untracked.
 
-Current status: **not deployed**. The agent did not change Production configuration
-or data and performed only read-only inspection of the owner's storage setup. Local feature
-verification and storage-configuration checks are complete. Branch/PR review,
-deployment approval, and post-deployment verification remain release gates. No development photo was
-transferred to Production.
-The ordinary application rollback process remains applicable;
-do not delete storage objects or database records as part of a code rollback.
-
-## Final release recheck — 2026-09-21
+## Historical local release recheck — 2026-09-21
 
 - The existing implementation was preserved without further application or layout
   edits. Only this documentation was updated during the release recheck.
@@ -166,22 +184,23 @@ do not delete storage objects or database records as part of a code rollback.
   displayed width. Browser console error/warning checks were clear.
 - The existing authenticated local admin session loaded the photo controls and
   current protected image successfully; no save/removal was performed. Signed-out
-  requests were denied. Auth/sign-out/non-admin regression tests passed; a fresh
-  production OAuth/photo test remains deferred until an approved release.
+  requests were denied. Auth/sign-out/non-admin regression tests passed. Production
+  verification was still pending at this historical checkpoint; the completed
+  Production verification is recorded above.
 - All 28 non-photo CMS checksums remained unchanged. The isolated database still
   contains one primary Profile linked to one MediaAsset. `.env.local` was unchanged.
 - Secret scanning found no credential matches in the changed/new inputs or 40
   freshly built client artifacts. Credentials and generated directories are ignored.
-- The final read-only Production configuration inspection confirms the owner
-  resolved the Preview-scope blocker. Runtime OIDC access on Vercel cannot be
-  certified until an approved deployment; no Production Blob upload or photo-data
-  transfer was tested. Ask for separate approval before any production photo save.
+- The read-only configuration inspection confirmed the owner had resolved the
+  Preview-scope blocker. Runtime OIDC access and the Production upload had not yet
+  been tested at this historical checkpoint; both are now verified as recorded
+  above. Future Production photo changes still require separate approval.
 
-## Deployment sequence and approvals
+## Workflow and approvals for future changes
 
-1. Obtain approval to commit the 35 feature files below on `profile-photo-support`,
-   push that branch to the existing `Manireddy5332/mani` origin, and create a pull
-   request into `main`. Exclude `Image.jpeg` and all local credentials/test artifacts.
+1. Make scoped changes on a topic branch from current `main`, review the diff,
+   and use the existing `Manireddy5332/mani` GitHub pull-request workflow. Exclude
+   `Image.jpeg` and all local credentials/test artifacts from every commit.
 2. Let the normal GitHub/Vercel Preview checks run and review the exact diff. Do not
    attach either Blob store to Preview to enable photo testing there: its photo
    controls should remain safely disabled. Do not change Preview database settings
@@ -193,20 +212,20 @@ do not delete storage objects or database records as part of a code rollback.
    may require the owner. Inspect the production photo controls without saving.
    Confirm the new runtime receives its Production-only Blob/OIDC configuration;
    stop rather than printing credentials or changing authentication if it fails.
-5. Stop for separate approval before any production photo upload, replacement,
-   removal, or other production data change. Only after that approval should the
-   owner-selected portrait be saved and its public Home/About rendering checked.
+5. Preserve the current owner-uploaded Production photo. Stop for separate approval
+   before any further upload, replacement, removal, or other Production data change.
    Never automatically upload the Development test image or copy its media record.
 
-No additional storage setup, new dependency, schema change, or migration is planned.
-The configuration is ready for this approval-gated release, not proof of a completed
-production photo transaction. If rollback is needed, restore the previous known-good
-application deployment; do not delete Blob objects or edit database records.
+No additional storage setup, dependency, schema change, or migration is required
+for the deployed feature. If rollback is needed, use the normal approved rollback
+process to restore a known-good application deployment; do not delete Blob objects
+or edit database records as part of a code rollback.
 
-## Exact feature file manifest
+## Released feature file manifest — PR #5
 
-The proposed release contains 35 files. `Image.jpeg` is an untracked local test
-input and must be excluded from the eventual commit. Never stage the workspace
+The original feature release contained the following 35 files. The three-file
+OIDC detection fix in PR #6 modified files already in this list. `Image.jpeg` is
+an untracked local test input and must stay out of commits. Never stage the workspace
 indiscriminately; credentials, `.cache`, `.vercel`, and build outputs stay excluded.
 
 Modified (17):
