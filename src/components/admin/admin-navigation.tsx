@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { AdminIcon } from "@/components/admin/admin-icon";
+import { MobileNavigation } from "@/components/ui/mobile-navigation";
 import {
   adminNavigationGroups,
   adminResources,
@@ -13,12 +14,12 @@ import {
 import { cn } from "@/lib/cn";
 
 const linkStyles =
-  "group flex min-h-10 items-center gap-3 rounded-xl border px-3 py-2 text-sm font-semibold transition-[color,background-color,border-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
+  "group flex min-h-11 items-center gap-3 rounded-xl border px-3 py-2 text-sm font-semibold transition-[color,background-color,border-color] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none";
 
 export function AdminNavigation() {
   const pathname = usePathname();
 
-  return (
+  const navigation = (
     <nav aria-label="Admin navigation" className="min-w-0">
       <Link
         href="/admin"
@@ -79,5 +80,14 @@ export function AdminNavigation() {
         })}
       </div>
     </nav>
+  );
+
+  return (
+    <>
+      <MobileNavigation label="Admin sections" routeKey={pathname}>
+        {navigation}
+      </MobileNavigation>
+      <div className="hidden lg:block">{navigation}</div>
+    </>
   );
 }

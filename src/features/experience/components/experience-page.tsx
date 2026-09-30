@@ -79,13 +79,13 @@ export function ExperiencePage({ content }: ExperiencePageProps) {
 
           {engagements.length > 0 ? (
             <ol
-              className="relative mt-14 space-y-8 before:absolute before:top-6 before:bottom-6 before:left-[1.35rem] before:w-px before:bg-gradient-to-b before:from-primary/60 before:via-line-strong before:to-transparent before:content-[''] md:mt-16 md:space-y-10 md:before:left-[11.35rem]"
+              className="relative mt-14 space-y-8 before:absolute before:top-6 before:bottom-6 before:left-2 before:w-px before:bg-gradient-to-b before:from-primary/60 before:via-line-strong before:to-transparent before:content-[''] sm:before:left-[1.35rem] md:mt-16 md:space-y-10 md:before:left-[11.35rem]"
               aria-label="Professional experience records"
             >
               {engagements.map((engagement, index) => (
                 <li
                   key={`${engagement.organization}-${engagement.role}-${index}`}
-                  className="relative grid grid-cols-[2.75rem_minmax(0,1fr)] gap-4 md:grid-cols-[10rem_2.75rem_minmax(0,1fr)] md:gap-5"
+                  className="relative grid grid-cols-[1rem_minmax(0,1fr)] gap-2 sm:grid-cols-[2.75rem_minmax(0,1fr)] sm:gap-4 md:grid-cols-[10rem_2.75rem_minmax(0,1fr)] md:gap-5"
                 >
                   <Reveal className="hidden pt-6 text-right md:block">
                     {engagement.period ? (
@@ -105,10 +105,10 @@ export function ExperiencePage({ content }: ExperiencePageProps) {
                   </Reveal>
 
                   <div className="relative z-10 flex justify-center pt-5">
-                    <span className="grid size-11 place-items-center rounded-full border border-primary/35 bg-canvas shadow-[0_0_0_7px_var(--color-canvas)]">
+                    <span className="grid size-4 place-items-center rounded-full border border-primary/35 bg-canvas shadow-[0_0_0_3px_var(--color-canvas)] sm:size-11 sm:shadow-[0_0_0_7px_var(--color-canvas)]">
                       <span
                         aria-hidden="true"
-                        className="size-2.5 rounded-full bg-primary shadow-[0_0_0_4px_rgb(71_84_194/0.12)]"
+                        className="size-1.5 rounded-full bg-primary sm:size-2.5 sm:shadow-[0_0_0_4px_rgb(71_84_194/0.12)]"
                       />
                       <span className="sr-only">Timeline point {index + 1}</span>
                     </span>
@@ -117,7 +117,7 @@ export function ExperiencePage({ content }: ExperiencePageProps) {
                   <Reveal delay={Math.min(index * 0.04, 0.16)}>
                     <Surface
                       as="article"
-                      className="group relative overflow-hidden transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
+                      className="group relative overflow-hidden p-4 transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lift motion-reduce:transform-none motion-reduce:transition-none"
                       padding="lg"
                       variant={index === 0 ? "raised" : "outlined"}
                     >

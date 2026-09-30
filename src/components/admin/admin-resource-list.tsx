@@ -27,6 +27,34 @@ function displayDate(value: string) {
   return Number.isNaN(date.getTime()) ? "Unknown" : dateFormatter.format(date);
 }
 
+function RecordActions({ record, resource }: {
+  record: AdminRecordSummaryDto;
+  resource: AdminResourceDefinition;
+}) {
+  return (
+    <div className="flex flex-wrap items-start gap-2 xl:justify-end xl:gap-1">
+      {resource.key !== "profile" &&
+      (record.status === "DRAFT" || record.status === "PUBLISHED") ? (
+        <AdminRecordVisibilityButton
+          id={record.id}
+          resource={resource.key}
+          status={record.status}
+          title={record.title}
+        />
+      ) : null}
+      {resource.capabilities.update ? (
+        <ButtonLink href={`/admin/${resource.key}/${record.id}/edit`} size="sm" variant="ghost">
+          <Pencil aria-hidden="true" className="size-4" />
+          Edit
+        </ButtonLink>
+      ) : null}
+      {resource.capabilities.delete && record.status !== "ARCHIVED" ? (
+        <AdminDeleteRecordButton id={record.id} resource={resource.key} title={record.title} />
+      ) : null}
+    </div>
+  );
+}
+
 export function AdminResourceList({
   profileExists,
   records,
@@ -85,7 +113,39 @@ export function AdminResourceList({
             }
           />
         ) : (
-          <div className="overflow-hidden rounded-2xl border border-line bg-surface">
+          <div>
+            <ul aria-label={`${resource.label} records`} className="space-y-4 xl:hidden">
+              {records.map((record) => (
+                <li key={record.id} className="min-w-0 rounded-2xl border border-line bg-surface p-4 sm:p-5">
+                  <h2 className="break-words text-base font-semibold text-ink">{record.title}</h2>
+                  {record.subtitle ? (
+                    <p className="mt-1 break-words text-sm leading-6 text-muted">{record.subtitle}</p>
+                  ) : null}
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <AdminStatusBadge status={record.status} />
+                    {record.featured ? (
+                      <span className="rounded-full border border-secondary/30 bg-secondary-soft px-2 py-0.5 font-mono text-xs font-semibold text-secondary">Featured</span>
+                    ) : null}
+                  </div>
+                  <dl className="my-4 grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <dt className="text-muted">Order</dt>
+                      <dd className="mt-1 text-ink">{record.sortOrder ?? "—"}</dd>
+                    </div>
+                    <div>
+                      <dt className="text-muted">Updated</dt>
+                      <dd className="mt-1 text-ink">
+                        <time dateTime={record.updatedAt}>{displayDate(record.updatedAt)}</time>
+                      </dd>
+                    </div>
+                  </dl>
+                  <div className="border-t border-line pt-3">
+                    <RecordActions record={record} resource={resource} />
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div className="hidden overflow-hidden rounded-2xl border border-line bg-surface xl:block">
             <div
               aria-label={`${resource.label} table; scroll horizontally for all columns`}
               className="overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
@@ -131,40 +191,13 @@ export function AdminResourceList({
                         <time dateTime={record.updatedAt}>{displayDate(record.updatedAt)}</time>
                       </td>
                       <td className="px-5 py-4">
-                        <div className="flex items-start justify-end gap-1">
-                          {resource.key !== "profile" &&
-                          (record.status === "DRAFT" ||
-                            record.status === "PUBLISHED") ? (
-                            <AdminRecordVisibilityButton
-                              id={record.id}
-                              resource={resource.key}
-                              status={record.status}
-                              title={record.title}
-                            />
-                          ) : null}
-                          {resource.capabilities.update ? (
-                            <ButtonLink
-                              href={`/admin/${resource.key}/${record.id}/edit`}
-                              size="sm"
-                              variant="ghost"
-                            >
-                              <Pencil aria-hidden="true" className="size-4" />
-                              Edit
-                            </ButtonLink>
-                          ) : null}
-                          {resource.capabilities.delete && record.status !== "ARCHIVED" ? (
-                            <AdminDeleteRecordButton
-                              id={record.id}
-                              resource={resource.key}
-                              title={record.title}
-                            />
-                          ) : null}
-                        </div>
+                        <RecordActions record={record} resource={resource} />
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
             </div>
           </div>
         )}

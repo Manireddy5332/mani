@@ -6,7 +6,7 @@ import { Button } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 export const nestedControlStyles =
-  "min-h-11 w-full rounded-xl border border-line bg-canvas px-3.5 py-2.5 text-sm text-ink shadow-[0_1px_0_rgb(20_25_35/0.02)] transition-[border-color,box-shadow] placeholder:text-muted/65 focus:border-primary focus:outline-none focus:ring-3 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-55";
+  "min-h-11 w-full rounded-xl border border-line bg-canvas px-3.5 py-2.5 text-base lg:text-sm text-ink shadow-[0_1px_0_rgb(20_25_35/0.02)] transition-[border-color,box-shadow] placeholder:text-muted/65 focus:border-primary focus:outline-none focus:ring-3 focus:ring-primary/10 disabled:cursor-not-allowed disabled:opacity-55";
 
 type NestedTextFieldProps = {
   description?: string;

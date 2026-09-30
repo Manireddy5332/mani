@@ -33,7 +33,7 @@ export function AdminDashboard({ dashboard }: AdminDashboardProps) {
             </p>
             <Link
               href="/admin/profile/new"
-              className="mt-3 inline-flex items-center gap-1.5 font-semibold text-primary hover:underline"
+              className="mt-3 inline-flex min-h-11 items-center gap-1.5 font-semibold text-primary hover:underline"
             >
               Create profile
               <ArrowRight aria-hidden="true" className="size-4" />

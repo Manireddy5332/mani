@@ -16,7 +16,7 @@ export function SiteFooter({ className = "" }: SiteFooterProps) {
         <div>
           <Link
             href="/"
-            className="inline-flex rounded-sm text-base font-semibold tracking-[-0.01em] text-ink transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
+            className="inline-flex min-h-11 items-center rounded-sm text-base font-semibold tracking-[-0.01em] text-ink transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
           >
             {siteConfig.brandName}
           </Link>
@@ -28,15 +28,15 @@ export function SiteFooter({ className = "" }: SiteFooterProps) {
         <div className="md:text-right">
           <nav aria-label="Secondary navigation" className="mb-4 flex flex-wrap gap-x-5 gap-y-2 md:justify-end">
             <a
-              className="text-sm font-semibold text-ink transition-colors hover:text-primary"
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-ink transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
               {...ACADEMIC_CV_LINK}
             >
               Academic CV
             </a>
-            <Link className="text-sm font-semibold text-ink transition-colors hover:text-primary" href="/contact">
+            <Link className="inline-flex min-h-11 items-center text-sm font-semibold text-ink transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" href="/contact">
               Contact
             </Link>
-            <Link className="text-sm font-semibold text-ink transition-colors hover:text-primary" href="/about">
+            <Link className="inline-flex min-h-11 items-center text-sm font-semibold text-ink transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary" href="/about">
               About
             </Link>
           </nav>
