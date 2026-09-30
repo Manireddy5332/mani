@@ -144,7 +144,7 @@ export function PersonalPortfolioHome({ home }: PersonalPortfolioHomeProps) {
                   {home.identity.introduction}
                 </p>
 
-                <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <ButtonLink href="/experience" size="lg">
                     View professional experience
                     <ArrowDownRight aria-hidden="true" className="size-4" />

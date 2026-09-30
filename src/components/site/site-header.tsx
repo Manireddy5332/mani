@@ -13,8 +13,8 @@ export function SiteHeader({ className = "" }: SiteHeaderProps) {
     <header
       className={`sticky top-0 z-50 overflow-x-clip border-b border-line/80 bg-canvas/90 backdrop-blur-xl ${className}`}
     >
-      <div className="mx-auto flex w-full max-w-[90rem] flex-col px-5 sm:px-8 lg:flex-row lg:items-center lg:gap-10 lg:px-12">
-        <div className="flex min-h-20 items-center justify-between gap-5">
+      <div className="mx-auto flex w-full max-w-[90rem] flex-col px-5 sm:px-8 lg:flex-row lg:items-center lg:gap-5 lg:px-12 xl:gap-10">
+        <div className="flex min-h-20 min-w-0 items-center justify-between gap-5 lg:flex-1">
           <Link
             href="/"
             className="group inline-flex min-w-0 items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
@@ -36,14 +36,14 @@ export function SiteHeader({ className = "" }: SiteHeaderProps) {
             </span>
           </Link>
 
-          <div className="lg:hidden">
+          <div className="shrink-0 lg:hidden">
             <ThemeToggle />
           </div>
         </div>
 
         <PrimaryNavigation />
 
-        <div className="ml-2 hidden lg:block">
+        <div className="ml-2 hidden shrink-0 lg:block">
           <ThemeToggle />
         </div>
       </div>

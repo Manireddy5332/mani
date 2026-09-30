@@ -59,7 +59,7 @@ export function AdminShell({ children, user }: AdminShellProps) {
 
       <div className="mx-auto grid w-full max-w-[90rem] gap-8 px-5 py-8 sm:px-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10 lg:px-12 lg:py-12">
         <aside className="min-w-0 lg:sticky lg:top-28 lg:self-start">
-          <div className="max-h-[calc(100vh-9rem)] overflow-y-auto rounded-2xl border border-line bg-surface/70 p-3 shadow-[0_22px_60px_-48px_rgb(20_25_35/0.48)]">
+          <div className="rounded-2xl border border-line bg-surface/70 p-3 shadow-[0_22px_60px_-48px_rgb(20_25_35/0.48)] lg:max-h-[calc(100vh-9rem)] lg:overflow-y-auto">
             <AdminNavigation />
           </div>
         </aside>

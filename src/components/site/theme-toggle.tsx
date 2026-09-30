@@ -29,7 +29,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-line bg-canvas text-ink transition-[color,background-color,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:translate-y-0 disabled:cursor-wait motion-reduce:transform-none motion-reduce:transition-none"
+      className="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-canvas text-ink transition-[color,background-color,border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:translate-y-0 disabled:cursor-wait motion-reduce:transform-none motion-reduce:transition-none"
       aria-label={mounted ? label : "Theme selector loading"}
       aria-pressed={mounted ? isDark : undefined}
       disabled={!mounted}

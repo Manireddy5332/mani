@@ -23,7 +23,7 @@ export function AdminPageHeader({
       {backHref ? (
         <Link
           href={backHref}
-          className="mb-5 inline-flex items-center gap-1.5 rounded-sm text-sm font-semibold text-muted transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          className="mb-5 inline-flex min-h-11 items-center gap-1.5 rounded-sm text-sm font-semibold text-muted transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
         >
           <ChevronLeft aria-hidden="true" className="size-4" />
           {backLabel}
