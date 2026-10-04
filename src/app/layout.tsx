@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { PublicAnalytics } from "@/components/site/public-analytics";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { publicEnvironment } from "@/lib/env";
@@ -96,6 +97,7 @@ export default function RootLayout({
           {children}
           <SiteFooter />
         </ThemeProvider>
+        <PublicAnalytics enabled={process.env.VERCEL_ENV === "production"} />
       </body>
     </html>
   );
